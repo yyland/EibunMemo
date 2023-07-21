@@ -19,17 +19,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_163520) do
   end
 
   create_table "memo_words", force: :cascade do |t|
-    t.integer "english_text_id", null: false
+    t.bigint "english_text_id", null: false
     t.string "word"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "start_position"
     t.integer "end_position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["english_text_id"], name: "index_memo_words_on_english_text_id"
   end
 
   create_table "memos", force: :cascade do |t|
-    t.integer "memo_word_id", null: false
+    t.bigint "memo_word_id", null: false
     t.text "memo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

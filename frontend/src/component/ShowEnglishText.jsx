@@ -163,7 +163,7 @@ const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord
             }}
             // borderBottom={isSavedWord ? "1px solid gray" : "none"}
             bg={isSavedWord ? "gray.200" : "transparent"}
-            paddingBottom="2px"
+            paddingBottom="1px"
           >
             {char}
           </Box>
