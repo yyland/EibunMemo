@@ -29,4 +29,3 @@ production:
   username: <%= ENV['PROD_DB_USERNAME'] %>
   password: <%= ENV['PROD_DB_PASSWORD'] %>
   host: <%= ENV['PROD_DB_HOST'] %>
-  socket: /var/lib/mysql/mysql.sock

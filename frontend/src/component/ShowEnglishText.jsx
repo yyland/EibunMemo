@@ -133,7 +133,7 @@ const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord
     setSelectedWord(word.word);
 
     try {
-      const res = await axios.get(`http://localhost:3010/api/memo_words/${word.id}/memos`);
+      const res = await axios.get(`https://api.eibunmemo.com/api/memo_words/${word.id}/memos`);
       setDisplayedMemos(prev => [...prev, ...res.data]);
     } catch (err) {
       console.log(err);

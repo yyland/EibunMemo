@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
 
-    get "health_check", to: "health_check#index"
+    get "health_check", to: "health_checks#index"
 
     get "english_texts", to: "english_texts#index"
     post "english_texts", to: "english_texts#create"
