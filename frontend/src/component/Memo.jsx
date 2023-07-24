@@ -9,14 +9,14 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
     e.preventDefault();
     if (selectedRegisteredWord) {
       try {
-        await axios.post('http://localhost:3010/api/memos', {
+        await axios.post('https://api.eibunmemo.com/api/memos', {
         memo: {
           memo_word_id: selectedRegisteredWord.id,
           memo: memo,
         }
       });
       setMemo('');
-      const resMemos = await axios.get(`http://localhost:3010/api/memo_words/${selectedRegisteredWord.id}/memos`);
+      const resMemos = await axios.get(`https://api.eibunmemo.com/api/memo_words/${selectedRegisteredWord.id}/memos`);
       setDisplayedMemos([...resMemos.data]);
       } catch (err) {
         console.error(err);
@@ -24,7 +24,7 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
 
     } else {
       try {
-        const res = await axios.post('http://localhost:3010/api/memo_words', {
+        const res = await axios.post('https://api.eibunmemo.com/api/memo_words', {
           memo_word: {
             english_text_id: selectedText.id,
             word: selectedWord,
@@ -33,7 +33,7 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
           }
         });
         const wordId = res.data.id;
-        await axios.post('http://localhost:3010/api/memos', {
+        await axios.post('https://api.eibunmemo.com/api/memos', {
           memo: {
             memo_word_id: wordId,
             memo: memo,
@@ -41,7 +41,7 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
         });
         setMemo('');
 
-        const resMemos = await axios.get(`http://localhost:3010/api/memo_words/${wordId}/memos`);
+        const resMemos = await axios.get(`https://api.eibunmemo.com/api/memo_words/${wordId}/memos`);
         setDisplayedMemos(prevMemos => [...prevMemos, ...resMemos.data]);
 
         addMemoWord(res.data);

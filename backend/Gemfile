@@ -52,6 +52,7 @@ group :development do
   gem 'rubocop-rspec'
 end
 
-# group :production do
+group :production do
 #   gem 'mysql2', '~> 0.5'
-# end
+  gem 'unicorn'
+end

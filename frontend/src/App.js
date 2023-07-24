@@ -19,7 +19,9 @@ const App = () => {
 
   const fetch = async () => {
     try {
-      const res = await axios.get('http://localhost:3010/api/english_texts');
+      const res = await axios.get(
+        'https://api.eibunmemo.com/api/english_texts'
+      );
       const englishTexts = res.data;
       setEnglishTexts(englishTexts);
 
@@ -31,7 +33,7 @@ const App = () => {
     }
 
     try {
-      const res = await axios.get('http://localhost:3010/api/memo_words');
+      const res = await axios.get('https://api.eibunmemo.com/api/memo_words');
       const savedWords = res.data;
       setMemoWords(savedWords);
     } catch (err) {
@@ -41,12 +43,15 @@ const App = () => {
 
   const registerText = async (title, text) => {
     try {
-      const res = await axios.post('http://localhost:3010/api/english_texts', {
-        english_text: {
-          title: title,
-          text: text,
-        },
-      });
+      const res = await axios.post(
+        'https://api.eibunmemo.com/api/english_texts',
+        {
+          english_text: {
+            title: title,
+            text: text,
+          },
+        }
+      );
       const newText = res.data;
       setEnglishTexts((prevTexts) => [...prevTexts, newText]);
       setSelectedComponent('ShowEnglishText');
@@ -59,7 +64,7 @@ const App = () => {
 
   const deleteText = async (id) => {
     try {
-      await axios.delete(`http://localhost:3010/api/english_texts/${id}`);
+      await axios.delete(`https://api.eibunmemo.com/api/english_texts/${id}`);
       setSelectedText(null);
       fetch();
     } catch (err) {
