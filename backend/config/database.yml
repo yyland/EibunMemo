@@ -10,7 +10,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: <%= ENV['DB_USERNAME'] %>
   password: <%= ENV['DB_PASSWORD'] %>
-  host: localhost
+  host: 127.0.0.1
 
 development:
   <<: *default
@@ -22,7 +22,6 @@ development:
 test:
   <<: *default
   database: eibunmemo_test
-  host: <%= ENV['DB_HOST'] %>
   protocol: tcp
 
 production:
