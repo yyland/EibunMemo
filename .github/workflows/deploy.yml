@@ -88,7 +88,8 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_RAILS_REPOSITORY }}
         with:
-          context: 'backend/prd'
+          context: '.'
+          file: './backend/prd/Dockerfile'
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
@@ -122,7 +123,8 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_NGINX_REPOSITORY }}
         with:
-          context: 'backend/prd/nginx'
+          context: '.'
+          file: './backend/prd/nginx/Dockerfile'
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
