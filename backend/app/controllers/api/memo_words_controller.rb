@@ -1,5 +1,4 @@
 class Api::MemoWordsController < ApplicationController
-
   def index
     @memo_words = MemoWord.all
     render json: @memo_words
@@ -38,5 +37,4 @@ class Api::MemoWordsController < ApplicationController
   def memo_word_params
     params.require(:memo_word).permit(:english_text_id, :word, :start_position, :end_position)
   end
-
 end

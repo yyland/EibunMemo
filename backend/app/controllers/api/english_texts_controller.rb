@@ -1,5 +1,4 @@
 class Api::EnglishTextsController < ApplicationController
-  
   def index
     @english_texts = EnglishText.all
     render json: @english_texts
