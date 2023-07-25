@@ -9,11 +9,22 @@ env:
   ECS_SERVICE: eibunmemo-service-51-6
   ECS_CLUSTER: eibunmemo-rails-cluster
   ECS_TASK_DEFINITION: eibunmemo-task-51
+  TEST_DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
+  TEST_DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
 
 jobs:
   test:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: $TEST_DB_PASSWORD
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
+
     defaults:
       run:
         working-directory: backend
@@ -29,11 +40,26 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
+      - name: Setup database
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
+        env:
+          RAILS_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_USERNAME: $TEST_DB_USERNAME
+          DB_PASSWORD: $TEST_DB_PASSWORD
+
       - name: Rubocop
         run: bundle exec rubocop
 
       - name: Run RSpec
         run: bundle exec rspec
+        env:
+          RAILS_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_USERNAME: $TEST_DB_USERNAME
+          DB_PASSWORD: $TEST_DB_PASSWORD
 
   backend_build_and_push:
     needs: test
