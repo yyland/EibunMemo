@@ -110,11 +110,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: List directory structure
-        run: |
-          echo "Listing root:"
-          ls -al
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -125,6 +120,15 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+      - name: List directory structure
+        run: |
+          echo "/:"
+          ls -al /
+          echo ".:"
+          ls -al .
+          echo "prd:"
+          ls -al prd
 
       - name: Build, tag, and push Nginx image to Amazon ECR
         id: build-nginx-image
