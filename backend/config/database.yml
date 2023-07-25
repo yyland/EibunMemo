@@ -23,6 +23,7 @@ test:
   <<: *default
   database: eibunmemo_test
   host: <%= ENV['DB_HOST'] %>
+  protocol: tcp
 
 production:
   <<: *default
