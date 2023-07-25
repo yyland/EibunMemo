@@ -1,5 +1,4 @@
 class Api::MemosController < ApplicationController
-
   def index
     @memos = Memo.all
     render json: @memos
@@ -32,5 +31,4 @@ class Api::MemosController < ApplicationController
   def memo_params
     params.require(:memo).permit(:memo_word_id, :memo)
   end
-
 end
