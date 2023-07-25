@@ -44,7 +44,7 @@ jobs:
           bundle exec rails db:schema:load
         env:
           RAILS_ENV: test
-          DB_HOST: mysql
+          DB_HOST: localhost:3306
           DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
 
@@ -55,7 +55,7 @@ jobs:
         run: bundle exec rspec
         env:
           RAILS_ENV: test
-          DB_HOST: localhost
+          DB_HOST: localhost:3306
           DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
 
