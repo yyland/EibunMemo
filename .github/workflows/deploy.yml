@@ -70,6 +70,13 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: List directory structure
+        run: |
+          echo "Listing root:"
+          ls -al
+          echo "Listing backend:"
+          ls -al backend
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -89,7 +96,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_RAILS_REPOSITORY }}
         with:
           context: '.'
-          file: './backend/prd/Dockerfile'
+          file: './prd/Dockerfile'
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
@@ -124,7 +131,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_NGINX_REPOSITORY }}
         with:
           context: '.'
-          file: './backend/prd/nginx/Dockerfile'
+          file: './prd/nginx/Dockerfile'
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
