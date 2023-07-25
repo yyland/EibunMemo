@@ -104,7 +104,7 @@ jobs:
           tags: $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
   deploy:
-    needs: build_and_push
+    needs: frontend_build_and_push
     runs-on: ubuntu-22.04
 
     steps:
