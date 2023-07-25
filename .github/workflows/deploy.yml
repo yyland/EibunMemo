@@ -74,8 +74,6 @@ jobs:
         run: |
           echo "Listing root:"
           ls -al
-          echo "Listing backend:"
-          ls -al backend
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -111,6 +109,11 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+
+      - name: List directory structure
+        run: |
+          echo "Listing root:"
+          ls -al
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
