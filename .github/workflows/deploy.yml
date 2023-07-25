@@ -90,7 +90,7 @@ jobs:
         with:
           context: 'backend/prd'
           push: true
-          tags: $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
   frontend_build_and_push:
     needs: backend_build_and_push
@@ -124,7 +124,7 @@ jobs:
         with:
           context: 'backend/prd/nginx'
           push: true
-          tags: $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
   deploy:
     needs: frontend_build_and_push
