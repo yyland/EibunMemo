@@ -1,0 +1,114 @@
+name: Deploy
+
+on:
+  push:
+    branches: ['main']
+
+env:
+  AWS_REGION: ap-northeast-1
+  ECS_SERVICE: eibunmemo-service-51-6
+  ECS_CLUSTER: eibunmemo-rails-cluster
+  ECS_TASK_DEFINITION: eibunmemo-task-51
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+        with:
+          ruby-version: '3.1.4'
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Rubocop
+        run: bundle exec rubocop
+
+      - name: Run RSpec
+        run: bundle exec rspec
+
+  build_and_push:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push Rails image to Amazon ECR
+        id: build-rails-image
+        uses: docker/build-push-action@v2
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_RAILS_REPOSITORY }}
+        with:
+          context: 'backend/prd'
+          push: true
+          tags: $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Build, tag, and push Nginx image to Amazon ECR
+        id: build-nginx-image
+        uses: docker/build-push-action@v2
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_NGINX_REPOSITORY }}
+        with:
+          context: 'backend/prd/nginx'
+          push: true
+          tags: $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+  deploy:
+    needs: build_and_push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Download the current ECS task definition
+        id: download-task-def
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} --query "taskDefinition" --output json > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: eibunmemo-rails
+          image: ${{ steps.build-rails-image.outputs.image }}
+
+      - name: Fill in the new image ID in the Amazon ECS task definition for Nginx
+        id: task-def-nginx
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          container-name: eibunmemo-nginx
+          image: ${{ steps.build-nginx-image.outputs.image }}
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-nginx.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
