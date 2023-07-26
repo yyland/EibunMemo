@@ -23,6 +23,7 @@ test:
   <<: *default
   database: eibunmemo_test
   protocol: tcp
+  host: mysql
 
 production:
   <<: *default
