@@ -22,7 +22,9 @@ development:
 test:
   <<: *default
   database: eibunmemo_test
-  protocol: tcp
+  username: root
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: 127.0.0.1
 
 production:
   <<: *default
