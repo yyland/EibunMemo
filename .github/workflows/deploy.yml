@@ -89,7 +89,7 @@ jobs:
 
       - name: Build Rails image
         run: |
-          docker build -t ${{ secrets.ECR_RAILS_REPOSITORY }}:latest -f backend/prd/Dockerfile .
+          docker build -t ${{ secrets.ECR_RAILS_REPOSITORY }}:latest -f prd/Dockerfile .
 
       - name: Tag and push Rails image to Amazon ECR
         run: |
@@ -121,7 +121,7 @@ jobs:
 
       - name: Build Nginx image
         run: |
-          docker build -t ${{ secrets.ECR_NGINX_REPOSITORY }}:latest -f backend/prd/nginx/Dockerfile .
+          docker build -t ${{ secrets.ECR_NGINX_REPOSITORY }}:latest -f prd/nginx/Dockerfile .
 
       - name: Tag and push Nginx image to Amazon ECR
         run: |
