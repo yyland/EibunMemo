@@ -6,13 +6,13 @@ on:
 
 env:
   AWS_REGION: ap-northeast-1
-  ECS_SERVICE: eibunmemo-service-51-6
+  ECS_SERVICE: eibunmemo-service-51-8
   ECS_CLUSTER: eibunmemo-rails-cluster
   ECS_TASK_DEFINITION: eibunmemo-task-51
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     timeout-minutes: 10
     services:
       mysql:
@@ -60,7 +60,7 @@ jobs:
 
   rails_build_and_push:
     needs: test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     timeout-minutes: 10
     defaults:
       run:
@@ -130,7 +130,7 @@ jobs:
 
   deploy:
     needs: nginx_build_and_push
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Configure AWS credentials
