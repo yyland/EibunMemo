@@ -14,4 +14,4 @@ COPY . /app
 RUN chmod +x /app/prd/start.sh
 EXPOSE 3000
 
-CMD [ "app/prd/start.sh" ]
+CMD [ "prd/start.sh" ]

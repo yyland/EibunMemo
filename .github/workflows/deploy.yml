@@ -87,7 +87,7 @@ jobs:
           pwd
           ls -al
           ls app
-          ls app/prd
+          ls prd
 
       - name: Build Rails image
         run: |
