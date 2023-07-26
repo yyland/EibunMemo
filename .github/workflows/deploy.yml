@@ -58,7 +58,7 @@ jobs:
           DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
 
-  backend_build_and_push:
+  rails_build_and_push:
     needs: test
     runs-on: ubuntu-22.04
     timeout-minutes: 10
@@ -81,15 +81,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: List directory structure
-        run: |
-          echo "/:"
-          ls -al /
-          echo ".:"
-          ls -al .
-          echo "prd:"
-          ls -al prd
-
       - name: Build, tag, and push Rails image to Amazon ECR
         id: build-rails-image
         uses: docker/build-push-action@v2
@@ -102,13 +93,13 @@ jobs:
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
-  frontend_build_and_push:
-    needs: backend_build_and_push
+  nginx_build_and_push:
+    needs: rails_build_and_push
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     defaults:
       run:
-        working-directory: frontend
+        working-directory: backend
 
     steps:
       - name: Check out repository
@@ -125,15 +116,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: List directory structure
-        run: |
-          echo "/:"
-          ls -al /
-          echo ".:"
-          ls -al .
-          echo "prd:"
-          ls -al prd
-
       - name: Build, tag, and push Nginx image to Amazon ECR
         id: build-nginx-image
         uses: docker/build-push-action@v2
@@ -141,13 +123,13 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_NGINX_REPOSITORY }}
         with:
-          context: frontend
-          file: frontend/prd/nginx/Dockerfile
+          context: backend
+          file: backend/prd/nginx/Dockerfile
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
   deploy:
-    needs: frontend_build_and_push
+    needs: nginx_build_and_push
     runs-on: ubuntu-22.04
 
     steps:
