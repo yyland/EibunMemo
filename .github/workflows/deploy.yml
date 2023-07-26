@@ -81,17 +81,14 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push Rails image to Amazon ECR
-        id: build-rails-image
-        uses: docker/build-push-action@v2
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_RAILS_REPOSITORY }}
-        with:
-          context: backend
-          file: backend/prd/Dockerfile
-          push: true
-          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
+      - name: Build Rails image
+        run: |
+          docker build -t ${{ secrets.ECR_RAILS_REPOSITORY }}:latest -f backend/prd/Dockerfile .
+
+      - name: Tag and push Rails image to Amazon ECR
+        run: |
+          docker tag ${{ secrets.ECR_RAILS_REPOSITORY }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_RAILS_REPOSITORY }}:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_RAILS_REPOSITORY }}:latest
 
   nginx_build_and_push:
     needs: rails_build_and_push
@@ -116,17 +113,14 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push Nginx image to Amazon ECR
-        id: build-nginx-image
-        uses: docker/build-push-action@v2
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_NGINX_REPOSITORY }}
-        with:
-          context: backend
-          file: backend/prd/nginx/Dockerfile
-          push: true
-          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
+      - name: Build Nginx image
+        run: |
+          docker build -t ${{ secrets.ECR_NGINX_REPOSITORY }}:latest -f backend/prd/nginx/Dockerfile .
+
+      - name: Tag and push Nginx image to Amazon ECR
+        run: |
+          docker tag ${{ secrets.ECR_NGINX_REPOSITORY }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_NGINX_REPOSITORY }}:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_NGINX_REPOSITORY }}:latest
 
   deploy:
     needs: nginx_build_and_push
