@@ -13,7 +13,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 30
     services:
       mysql:
         image: mysql:5.7
@@ -61,7 +61,7 @@ jobs:
   rails_build_and_push:
     needs: test
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: backend
@@ -95,8 +95,8 @@ jobs:
 
   nginx_build_and_push:
     needs: rails_build_and_push
-    runs-on: ubuntu-22.04
-    timeout-minutes: 10
+    runs-on: ubuntu-20.04
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: backend
