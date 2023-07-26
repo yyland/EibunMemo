@@ -71,11 +71,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Debug current directory
-        run: |
-          pwd
-          ls -al
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -86,6 +81,13 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Debug current directory
+        run: |
+          pwd
+          ls -al
+          ls /app
+          ls /app/prd
 
       - name: Build Rails image
         run: |
