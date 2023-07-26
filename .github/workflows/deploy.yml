@@ -96,9 +96,17 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_RAILS_REPOSITORY }}
+        run: |
+          echo "/:"
+          ls -al /
+          echo ".:"
+          ls -al .
+          echo "prd:"
+          ls -al prd
+
         with:
-          context: '.'
-          file: 'prd/Dockerfile'
+          context: backend
+          file: ./prd/Dockerfile
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
