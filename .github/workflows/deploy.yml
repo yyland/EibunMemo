@@ -165,7 +165,7 @@ jobs:
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           container-name: eibunmemo-nginx
-          image: ${{ steps.build-nginx-image.outputs.image }}
+          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
