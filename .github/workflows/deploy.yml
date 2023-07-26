@@ -71,6 +71,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: Debug current directory
+        run: |
+          pwd
+          ls -al
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
