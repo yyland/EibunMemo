@@ -1,4 +1,4 @@
-FROM nginx:1.18
+FROM --platform=linux/amd64 nginx:1.18
 RUN apt-get update && \
   apt-get install -y apt-utils \
   locales && \
