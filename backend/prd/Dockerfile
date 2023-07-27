@@ -1,8 +1,9 @@
-FROM ruby:3.1.4
+FROM --platform=linux/amd64 ruby:3.1.4
 RUN apt-get update -qq && \
   apt-get install -y build-essential \
   libpq-dev \
-  nodejs
+  nodejs \
+  default-mysql-client
 
 RUN mkdir /app
 WORKDIR /app
@@ -14,4 +15,4 @@ COPY . /app
 RUN chmod +x /app/prd/start.sh
 EXPOSE 3000
 
-CMD [ "prd/start.sh" ]
+CMD [ "/app/prd/start.sh" ]

@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-1
-  ECS_SERVICE: eibunmemo-service-cicd-2
+  ECS_SERVICE: eibunmemo-rails-cluster/eibunmemo-service-51-22
   ECS_CLUSTER: eibunmemo-rails-cluster
   ECS_TASK_DEFINITION: eibunmemo-task-51
 
@@ -146,28 +146,6 @@ jobs:
         id: download-task-def
         run: |
           aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} --query "taskDefinition" --output json > task-definition.json
-
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_RAILS_REPOSITORY }}
-        with:
-          task-definition: task-definition.json
-          container-name: eibunmemo-rails
-          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
-
-      - name: Fill in the new image ID in the Amazon ECS task definition for Nginx
-        id: task-def-nginx
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_NGINX_REPOSITORY }}
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          container-name: eibunmemo-nginx
-          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
 
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
