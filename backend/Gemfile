@@ -43,6 +43,8 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'sentry-rails'
+  gem 'sentry-ruby'
 end
 
 group :development do
@@ -56,7 +58,7 @@ group :development do
 end
 
 group :production do
+  gem 'sentry-rails'
+  gem 'sentry-ruby'
   gem 'unicorn'
-  gem "sentry-ruby"
-  gem "sentry-rails"
 end
