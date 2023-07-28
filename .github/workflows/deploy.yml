@@ -82,13 +82,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Debug current directory
-        run: |
-          pwd
-          ls -al
-          ls app
-          ls prd
-
       - name: Build Rails image
         run: |
           docker build -t ${{ secrets.ECR_RAILS_REPOSITORY }}:latest -f prd/Dockerfile .
