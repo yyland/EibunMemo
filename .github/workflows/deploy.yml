@@ -13,7 +13,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-20.04
-    timeout-minutes: 20
+    timeout-minutes: 10
     services:
       mysql:
         image: mysql:5.7
@@ -62,7 +62,7 @@ jobs:
   rails_build_and_push:
     needs: test
     runs-on: ubuntu-20.04
-    timeout-minutes: 30
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: backend
@@ -94,7 +94,7 @@ jobs:
   nginx_build_and_push:
     needs: rails_build_and_push
     runs-on: ubuntu-20.04
-    timeout-minutes: 30
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: backend
@@ -122,6 +122,42 @@ jobs:
         run: |
           docker tag ${{ secrets.ECR_NGINX_REPOSITORY }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_NGINX_REPOSITORY }}:latest
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_NGINX_REPOSITORY }}:latest
+
+  upload_to_s3:
+    needs: nginx_build_and_push
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build project
+        run: yarn run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload to S3
+        uses: aws-actions/aws-cli@v1
+        with:
+          entrypoint: /bin/sh
+          args: '-c "aws s3 cp build/ s3://${{ secrets.AWS_S3_BUCKET }}/ --recursive"'
 
   deploy:
     needs: nginx_build_and_push
