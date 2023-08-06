@@ -35,5 +35,9 @@ module Backend
         routing_specs: false # routes.rb用のスペックファイル作成しない
     end
 
+    config.session_store :cookie_store, key: '_session'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
+
   end
 end

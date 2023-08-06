@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Texts from './routes/Texts';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,6 +15,7 @@ root.render(
       <BrowserRouter>
         <Routes>
           <Route index element={<App />} />
+          <Route path="texts" element={<Texts />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

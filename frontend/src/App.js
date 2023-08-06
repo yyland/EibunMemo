@@ -3,8 +3,29 @@ import Memo from './component/Memo';
 import Menu from './component/Menu';
 import RegisterEnglishText from './component/RegisterEnglishText';
 import ShowEnglishText from './component/ShowEnglishText';
+import { SignUpModal } from './components/SignUpModal';
 import axios from 'axios';
-import { Box, Flex } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Text,
+  Input,
+  Button,
+  Link as CLink,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+// import { getUser } from '../lib/api/auth.js';
+import { useNavigate } from 'react-router-dom';
+import { signIn, getUser } from './lib/api/auth.js';
+import Cookies from 'js-cookie';
 
 const App = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -16,6 +37,36 @@ const App = () => {
   const [selectedRegisteredWord, setSelectedRegisteredWord] = useState(null);
   const [startIndex, setStartIndex] = useState(null);
   const [endIndex, setEndIndex] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const f = async () => {
+      try {
+        const res = await getUser();
+        console.log('res', res);
+        if (res && res.data.isLogin) {
+          navigate('texts');
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    console.log('f');
+    f();
+  }, [navigate]);
+
+  const {
+    isOpen: isSignUpModalOpen,
+    onOpen: onSignUpModalOpen,
+    onClose: onSignUpModalClose,
+  } = useDisclosure();
+
+  // const {
+  //   isOpen: isLogInModalOpen,
+  //   onOpen: onLogInModalOpen,
+  //   onClose: onLogInModalClose,
+  // } = useDisclosure();
 
   const fetch = async () => {
     try {
@@ -76,12 +127,9 @@ const App = () => {
     setMemoWords([...memoWords, newMemoWord]);
   };
 
-  useEffect(() => {
-    fetch();
-  }, []);
-
   return (
     <Flex>
+      <SignUpModal isOpen={isSignUpModalOpen} onClose={onSignUpModalClose} />
       <Box width="300px" border="1px" borderColor="gray.200" p="4">
         <Menu
           selectedText={selectedText}
@@ -89,6 +137,7 @@ const App = () => {
           setSelectedText={setSelectedText}
           englishTexts={englishTexts}
           deleteText={deleteText}
+          onSignUpModalOpen={onSignUpModalOpen}
         />
       </Box>
       <Box flex="2" border="1px" borderColor="gray.200" p="4" overflow="auto">
