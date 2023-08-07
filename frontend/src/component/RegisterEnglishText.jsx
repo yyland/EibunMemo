@@ -7,8 +7,12 @@ const RegisterEnglishText = ({ registerText, setSelectedText }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!title || !text) {
+      return;
+    }
     try {
       const res = await registerText(title, text);
+      console.log('res', res);
       setSelectedText(res);
     }
     catch (err) {

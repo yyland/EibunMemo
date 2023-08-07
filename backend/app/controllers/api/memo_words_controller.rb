@@ -35,6 +35,6 @@ class Api::MemoWordsController < ApplicationController
   private
 
   def memo_word_params
-    params.require(:memo_word).permit(:english_text_id, :word, :start_position, :end_position)
+    params.require(:memo_word).permit(:english_text_id, :word, :start_position, :end_position, :is_momery_list)
   end
 end

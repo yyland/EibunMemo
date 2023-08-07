@@ -3,6 +3,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 
 const EnglishTextList = ({ selectedText, setSelectedText, englishTexts, deleteText }) => {
 
+  console.log('englishTexts', englishTexts);
 
   return (
     <Box display="flex" justifyContent="space-between" mt='12px'>

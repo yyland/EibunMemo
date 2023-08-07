@@ -29,6 +29,6 @@ class Api::MemosController < ApplicationController
   private
 
   def memo_params
-    params.require(:memo).permit(:memo_word_id, :memo)
+    params.require(:memo).permit(:memo_word_id, :body)
   end
 end

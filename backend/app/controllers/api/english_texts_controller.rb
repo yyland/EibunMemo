@@ -1,4 +1,6 @@
 class Api::EnglishTextsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @english_texts = EnglishText.all
     render json: @english_texts
@@ -10,8 +12,14 @@ class Api::EnglishTextsController < ApplicationController
   end
 
   def create
-    @english_text = EnglishText.create(english_text_params)
-    render json: @english_text
+
+    @english_text = current_user.english_texts.new(english_text_params)
+
+    if @english_text.save
+      render json: @english_text, status: :created
+    else
+      render json: @english_text.errors, status: :unprocessable_entity
+    end
   end
 
   def update
@@ -29,6 +37,6 @@ class Api::EnglishTextsController < ApplicationController
   private
 
   def english_text_params
-    params.require(:english_text).permit(:title, :text)
+    params.require(:english_text).permit(:title, :body)
   end
 end

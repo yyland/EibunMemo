@@ -29,6 +29,15 @@ import { signIn, getUser } from './lib/api/auth.js';
 import Cookies from 'js-cookie';
 import { SignUpButton } from './components/SignUpButton';
 import { SignInButton } from './components/SignInButton';
+import { deleteEnglishText, getEnglishTexts } from './lib/api/englishText';
+import { registerEnglishText } from './lib/api/englishText';
+import { updateEnglishText } from './lib/api/englishText';
+import { getMemoWords } from './lib/api/memoWord';
+import { registerMemoWord } from './lib/api/memoWord';
+import { updateMemoWord } from './lib/api/memoWord';
+import { getMemo } from './lib/api/memo';
+import { registerMemo } from './lib/api/memo';
+import { updateMemo } from './lib/api/memo';
 
 const App = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -47,7 +56,7 @@ const App = () => {
     const f = async () => {
       try {
         const res = await getUser();
-        console.log('res', res);
+        console.log('getUser', res);
         if (res && res.data.isLogin) {
           navigate('/texts');
         }
@@ -73,9 +82,7 @@ const App = () => {
 
   const fetch = async () => {
     try {
-      const res = await axios.get(
-        'https://api.eibunmemo.com/api/english_texts'
-      );
+      const res = await getEnglishTexts();
       const englishTexts = res.data;
       setEnglishTexts(englishTexts);
 
@@ -87,7 +94,7 @@ const App = () => {
     }
 
     try {
-      const res = await axios.get('https://api.eibunmemo.com/api/memo_words');
+      const res = await getMemoWords();
       const savedWords = res.data;
       setMemoWords(savedWords);
     } catch (err) {
@@ -97,15 +104,12 @@ const App = () => {
 
   const registerText = async (title, text) => {
     try {
-      const res = await axios.post(
-        'https://api.eibunmemo.com/api/english_texts',
-        {
-          english_text: {
-            title: title,
-            text: text,
-          },
-        }
-      );
+      const res = await registerEnglishText({
+        english_text: {
+          title: title,
+          body: text,
+        },
+      });
       const newText = res.data;
       setEnglishTexts((prevTexts) => [...prevTexts, newText]);
       setSelectedComponent('ShowEnglishText');
@@ -118,7 +122,7 @@ const App = () => {
 
   const deleteText = async (id) => {
     try {
-      await axios.delete(`https://api.eibunmemo.com/api/english_texts/${id}`);
+      await deleteEnglishText(id);
       setSelectedText(null);
       fetch();
     } catch (err) {
@@ -162,7 +166,7 @@ const App = () => {
           />
         ) : (
           <RegisterEnglishText
-            registerText={registerText}
+            registerText={registerEnglishText}
             setSelectedText={setSelectedText}
           />
         )}

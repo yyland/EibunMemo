@@ -5,10 +5,11 @@ import axios from "axios";
 const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord, setSelectedWord, startIndex, setStartIndex, endIndex, setEndIndex, memoWords, setDisplayedMemos }) => {
 
   const theme = useTheme();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   if (!selectedText) return <Box></Box>;
 
-  const chars = selectedText.text.split('');
+  const chars = selectedText.body.split('');
 
   const getSelectedWord = () => {
     const selected = window.getSelection().toString().trim();
@@ -133,7 +134,7 @@ const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord
     setSelectedWord(word.word);
 
     try {
-      const res = await axios.get(`https://api.eibunmemo.com/api/memo_words/${word.id}/memos`);
+      const res = await axios.get(`${API_URL}/memo_words/${word.id}/memos`);
       setDisplayedMemos(prev => [...prev, ...res.data]);
     } catch (err) {
       console.log(err);
