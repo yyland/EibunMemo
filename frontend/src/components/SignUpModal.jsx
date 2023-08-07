@@ -12,10 +12,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { signUp } from "../lib/api/auth.js";
+import { useNavigate } from 'react-router-dom';
 
 export const SignUpModal = ({isOpen, onClose}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState(""); 
+  const navigate = useNavigate();
 
   const clearInput = () => {
     setUsername("");
@@ -51,6 +53,7 @@ export const SignUpModal = ({isOpen, onClose}) => {
               signUp({ username, password });
               clearInput();
               onClose();
+              navigate("texts");
             }}
           >
             登録する

@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_06_082648) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_06_234153) do
   create_table "english_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "title"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_english_texts_on_user_id"
   end
 
   create_table "memo_words", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -23,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_06_082648) do
     t.text "word"
     t.integer "start_position"
     t.integer "end_position"
+    t.boolean "is_momery_list"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["english_text_id"], name: "index_memo_words_on_english_text_id"
@@ -63,6 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_06_082648) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "english_texts", "users"
   add_foreign_key "memo_words", "english_texts"
   add_foreign_key "memos", "memo_words"
 end

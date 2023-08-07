@@ -5,6 +5,7 @@ class CreateMemoWords < ActiveRecord::Migration[7.0]
       t.text :word
       t.integer :start_position
       t.integer :end_position
+      t.boolean :is_momery_list
       t.timestamps
     end
   end
