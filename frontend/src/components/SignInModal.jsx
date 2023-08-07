@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import {
   Modal,
   ModalOverlay,
@@ -12,41 +12,37 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-// import { getUser } from "../lib/api/auth.js";
-import { useDisclosure } from "@chakra-ui/react";
-import { signIn, getUser } from "../lib/api/auth.js";
+import { signIn } from "../lib/api/auth.js";
 import Cookies from "js-cookie";
 
-export const SignUpModal = ({isSignUpModalOpen, onSignUpModalClose, onClose, signUp}) => {
+export const SignInModal = ({isOpen, onClose}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState(""); 
   const navigate = useNavigate();
 
-
-  const login = async () => {
+  const register = async () => {
     try {
       const res = await signIn({ username, password });
       Cookies.set("_access_token", res.headers["access-token"]);
       Cookies.set("_client", res.headers["client"]);
       Cookies.set("_uid", res.headers["uid"]);
-      navigate("texts");
+      console.log('res', res);
+      navigate("/texts");
     } catch (e) {
       console.log(e);
     }
   };
 
-
-  const clearEvent = () => {
+  const clearInput = () => {
     setUsername("");
     setPassword("");
   };
 
-
   return (
-    <Modal isOpen={isSignUpModalOpen} onClose={onSignUpModalClose} isCentered>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>新規ユーザー登録</ModalHeader>
+        <ModalHeader></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text fontWeight="bold">ユーザー名</Text>
@@ -68,17 +64,15 @@ export const SignUpModal = ({isSignUpModalOpen, onSignUpModalClose, onClose, sig
           <Button
             colorScheme="blue"
             onClick={() => {
-              signUp({ username, password });
-              clearEvent();
+              register({ username, password });
+              clearInput();
               onClose();
             }}
           >
-            登録する
+            ログイン
           </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
 };
-
-

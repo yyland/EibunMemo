@@ -4,6 +4,7 @@ import Menu from './component/Menu';
 import RegisterEnglishText from './component/RegisterEnglishText';
 import ShowEnglishText from './component/ShowEnglishText';
 import { SignUpModal } from './components/SignUpModal';
+import { SignInModal } from './components/SignInModal';
 import axios from 'axios';
 import {
   Box,
@@ -26,6 +27,8 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { signIn, getUser } from './lib/api/auth.js';
 import Cookies from 'js-cookie';
+import { SignUpButton } from './components/SignUpButton';
+import { SignInButton } from './components/SignInButton';
 
 const App = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -46,7 +49,7 @@ const App = () => {
         const res = await getUser();
         console.log('res', res);
         if (res && res.data.isLogin) {
-          navigate('texts');
+          navigate('/texts');
         }
       } catch (e) {
         console.log(e);
@@ -62,11 +65,11 @@ const App = () => {
     onClose: onSignUpModalClose,
   } = useDisclosure();
 
-  // const {
-  //   isOpen: isLogInModalOpen,
-  //   onOpen: onLogInModalOpen,
-  //   onClose: onLogInModalClose,
-  // } = useDisclosure();
+  const {
+    isOpen: isSignInModalOpen,
+    onOpen: onSignInModalOpen,
+    onClose: onSignInModalClose,
+  } = useDisclosure();
 
   const fetch = async () => {
     try {
@@ -130,6 +133,9 @@ const App = () => {
   return (
     <Flex>
       <SignUpModal isOpen={isSignUpModalOpen} onClose={onSignUpModalClose} />
+      <SignInModal isOpen={isSignInModalOpen} onClose={onSignInModalClose} />
+      <SignUpButton onSignUpModalOpen={onSignUpModalOpen} />
+      <SignInButton onSignInModalOpen={onSignInModalOpen} />
       <Box width="300px" border="1px" borderColor="gray.200" p="4">
         <Menu
           selectedText={selectedText}
