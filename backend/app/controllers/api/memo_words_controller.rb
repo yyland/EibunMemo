@@ -1,40 +1,63 @@
 class Api::MemoWordsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_memo_word, only: [:show, :update, :destroy, :memos]
+  before_action :ensure_user_owns_memo_word, only: [:show, :update, :destroy, :memos]
+
   def index
-    @memo_words = MemoWord.all
+    @memo_words = MemoWord.joins(:english_text).where(english_texts: { user_id: current_user.id })
     render json: @memo_words
-  end
+  end  
 
   def show
-    @memo_word = MemoWord.find(params[:id])
     render json: @memo_word
   end
 
   def create
-    @memo_word = MemoWord.create(memo_word_params)
-    render json: @memo_word
+    @english_text = current_user.english_texts.find_by(id: memo_word_params[:english_text_id])
+    unless @english_text
+      render status: :not_found
+      return
+    end
+
+    @memo_word = @english_text.memo_words.new(memo_word_params)
+    if @memo_word.save
+      render json: @memo_word, status: :created
+    else
+      render json: @memo_word.errors, status: :unprocessable_entity
+    end
   end
 
   def update
-    @memo_word = MemoWord.find(params[:id])
-    @memo_word.update(memo_word_params)
-    render json: @memo_word
+    if @memo_word.update(memo_word_params)
+      render json: @memo_word
+    else
+      render json: @memo_word.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    @memo_word = MemoWord.find(params[:id])
     @memo_word.destroy
-    render json: @memo_word
+    render status: :no_content
   end
 
   def memos
-    @memo_word = MemoWord.find(params[:id])
     @memos = @memo_word.memos
     render json: @memos
   end
 
   private
 
+  def set_memo_word
+    @memo_word = MemoWord.find_by(id: params[:id])
+  end
+
+  def ensure_user_owns_memo_word
+    unless current_user.english_texts.include?(@memo_word.english_text)
+      render status: :forbidden
+    end
+  end
+
   def memo_word_params
-    params.require(:memo_word).permit(:english_text_id, :word, :start_position, :end_position, :is_momery_list)
+    params.require(:memo_word).permit(:english_text_id, :word, :start_position, :end_position, :is_memory_list)
   end
 end

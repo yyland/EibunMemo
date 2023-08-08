@@ -64,59 +64,6 @@ const Texts = () => {
     f();
   }, [navigate]);
 
-  useEffect(() => {
-    fetch();
-  }, []);
-
-  const fetch = async () => {
-    try {
-      const res = await getEnglishTexts();
-      const englishTexts = res.data;
-      setEnglishTexts(englishTexts);
-
-      if (englishTexts.length > 0) {
-        setSelectedText(englishTexts[0]);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-
-    try {
-      const res = await getMemoWords();
-      const savedWords = res.data;
-      setMemoWords(savedWords);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const registerText = async (title, text) => {
-    try {
-      const res = await registerEnglishText({
-        english_text: {
-          title: title,
-          body: text,
-        },
-      });
-      const newText = res.data;
-      setEnglishTexts((prevTexts) => [...prevTexts, newText]);
-      setSelectedComponent('ShowEnglishText');
-      setSelectedText(newText);
-      return res.data;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const deleteText = async (id) => {
-    try {
-      await deleteEnglishText(id);
-      setSelectedText(null);
-      fetch();
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const addMemoWord = (newMemoWord) => {
     setMemoWords([...memoWords, newMemoWord]);
@@ -128,18 +75,21 @@ const Texts = () => {
     <Flex>
       <Box width="300px" border="1px" borderColor="gray.200" p="4">
         <Menu
+          setEnglishTexts={setEnglishTexts}
           selectedText={selectedText}
           setSelectedComponent={setSelectedComponent}
           setSelectedText={setSelectedText}
           englishTexts={englishTexts}
-          deleteText={deleteText}
         />
       </Box>
       <Box flex="2" border="1px" borderColor="gray.200" p="4" overflow="auto">
         {selectedComponent === 'ShowEnglishText' ? (
           <ShowEnglishText
             selectedText={selectedText}
+            setSelectedText={setSelectedText}
+            setEnglishTexts={setEnglishTexts}
             selectedWord={selectedWord}
+            setMemoWords={setMemoWords}
             setSelectedWord={setSelectedWord}
             setSelectedRegisteredWord={setSelectedRegisteredWord}
             startIndex={startIndex}
@@ -151,8 +101,10 @@ const Texts = () => {
           />
         ) : (
           <RegisterEnglishText
-            registerText={registerText}
+            setEnglishTexts={setEnglishTexts}
+            englishTexts={englishTexts}
             setSelectedText={setSelectedText}
+            setSelectedComponent={setSelectedComponent}
           />
         )}
       </Box>

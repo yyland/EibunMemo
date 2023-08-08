@@ -17,7 +17,7 @@ export const getMemos = () => {
   });
 };
 
-export const registerMemoWord = (params) => {
+export const registerMemo = (params) => {
   if (
     !Cookies.get('_access_token') ||
     !Cookies.get('_client') ||
@@ -33,7 +33,7 @@ export const registerMemoWord = (params) => {
   });
 };
 
-export const updateMemoWord = (params) => {
+export const updateMemo = (params) => {
   if (
     !Cookies.get('_access_token') ||
     !Cookies.get('_client') ||
@@ -51,7 +51,7 @@ export const updateMemoWord = (params) => {
   });
 };
 
-export const deleteMemoWord = (params) => {
+export const deleteMemo = (params) => {
   if (
     !Cookies.get('_access_token') ||
     !Cookies.get('_client') ||
@@ -60,7 +60,7 @@ export const deleteMemoWord = (params) => {
     return;
 
   // TODO params.Id
-  return client.delete(`/memo_words/${params.Id}`, {
+  return client.delete(`/memos/${params.Id}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

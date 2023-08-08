@@ -2,19 +2,17 @@ class Api::EnglishTextsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @english_texts = EnglishText.all
+    @english_texts = current_user.english_texts.all
     render json: @english_texts
   end
 
   def show
-    @english_text = EnglishText.find(params[:id])
+    @english_text = EnglishText.find(english_text_params[:id])
     render json: @english_text
   end
 
   def create
-
     @english_text = current_user.english_texts.new(english_text_params)
-
     if @english_text.save
       render json: @english_text, status: :created
     else
@@ -31,7 +29,13 @@ class Api::EnglishTextsController < ApplicationController
   def destroy
     @english_text = EnglishText.find(params[:id])
     @english_text.destroy
-    render json: @english_text
+    head :no_content
+  end
+
+  def memo_words
+    @english_text = EnglishText.find(params[:id])
+    @memo_words = @english_text.memo_words
+    render json: @memo_words
   end
 
   private

@@ -42,8 +42,7 @@ export const updateEnglishText = (params) => {
   )
     return;
 
-  // TODO params.Id
-  return client.put(`/english_texts/${params.Id}`, params, {
+  return client.put(`api/english_texts/${params.id}`, params, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -52,7 +51,7 @@ export const updateEnglishText = (params) => {
   });
 };
 
-export const deleteEnglishText = (params) => {
+export const deleteEnglishText = (id) => {
   if (
     !Cookies.get('_access_token') ||
     !Cookies.get('_client') ||
@@ -60,8 +59,7 @@ export const deleteEnglishText = (params) => {
   )
     return;
 
-  // TODO params.Id
-  return client.delete(`/english_texts/${params.Id}`, {
+  return client.delete(`api/english_texts/${id}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

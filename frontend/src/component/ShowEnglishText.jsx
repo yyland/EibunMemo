@@ -1,15 +1,46 @@
 import { Text, Box, useTheme } from "@chakra-ui/react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { getEnglishTexts } from "../lib/api/englishText";
+import { getMemoWords } from "../lib/api/memoWord";
+import { getMemos } from "../lib/api/memo";
+import { registerMemo } from "../lib/api/memo";
 
 
-const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord, setSelectedWord, startIndex, setStartIndex, endIndex, setEndIndex, memoWords, setDisplayedMemos }) => {
+
+const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selectedWord, setMemoWords, setSelectedRegisteredWord, setSelectedWord, startIndex, setStartIndex, endIndex, setEndIndex, memoWords, setDisplayedMemos }) => {
+  
 
   const theme = useTheme();
-  const API_URL = process.env.REACT_APP_API_URL;
 
-  if (!selectedText) return <Box></Box>;
 
-  const chars = selectedText.body.split('');
+  const fetch = async () => {
+    try {
+      const resTexts = await getEnglishTexts();
+      const englishTexts = resTexts.data;
+      setEnglishTexts(englishTexts);
+
+      if (englishTexts.length > 0) {
+        setSelectedText(englishTexts[0]);
+      }
+
+      const resWords = await getMemoWords();
+      const savedWords = resWords.data;
+      setMemoWords(savedWords);
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+  useEffect(() => {
+    fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+  const chars = selectedText && selectedText.body ? selectedText.body.split('') : [];
+
 
   const getSelectedWord = () => {
     const selected = window.getSelection().toString().trim();
@@ -134,7 +165,7 @@ const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord
     setSelectedWord(word.word);
 
     try {
-      const res = await axios.get(`${API_URL}/memo_words/${word.id}/memos`);
+      const res = await getMemos(`/memo_words/${word.id}/memos`);
       setDisplayedMemos(prev => [...prev, ...res.data]);
     } catch (err) {
       console.log(err);

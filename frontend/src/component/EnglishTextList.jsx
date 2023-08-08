@@ -1,9 +1,21 @@
 import { Box, List, ListItem, IconButton } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { deleteEnglishText } from "../lib/api/englishText";
 
-const EnglishTextList = ({ selectedText, setSelectedText, englishTexts, deleteText }) => {
+const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, englishTexts }) => {
 
-  console.log('englishTexts', englishTexts);
+  const deleteText = async (id) => {
+    console.log('deleteText', id);
+    try {
+      await deleteEnglishText(id);
+      setEnglishTexts((prevTexts) => prevTexts.filter((prevText) => prevText.id !== id));
+      if (englishTexts.length > 0) {
+        setSelectedText(englishTexts[0]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <Box display="flex" justifyContent="space-between" mt='12px'>

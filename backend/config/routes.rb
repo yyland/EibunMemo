@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get "english_texts/:id", to: "english_texts#show"
     put "english_texts/:id", to: "english_texts#update"
     delete "english_texts/:id", to: "english_texts#destroy"
+    get "english_texts/:id/memo_words", to: "english_texts#memo_words"
 
     get "memo_words", to: "memo_words#index"
     post "memo_words", to: "memo_words#create"

@@ -1,9 +1,49 @@
 import React, { useState } from 'react';
 import { Button, FormControl, FormLabel, Input, VStack } from "@chakra-ui/react";
+import { registerEnglishText, updateEnglishText, deleteEnglishText } from '../lib/api/englishText';
 
-const RegisterEnglishText = ({ registerText, setSelectedText }) => {
+const RegisterEnglishText = ({ setEnglishTexts, englishTexts, setSelectedText ,setSelectedComponent }) => {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+
+
+  const registerText = async (title, text) => {
+    try {
+      const res = await registerEnglishText({
+        english_text: {
+          title: title,
+          body: text,
+        },
+      });
+      const newText = res.data;
+      setEnglishTexts((prevTexts) => [...prevTexts, newText]);
+      setSelectedText(newText);
+      setSelectedComponent('ShowEnglishText');
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const updateText = async (id, title, text) => {
+    try {
+      const res = await updateEnglishText(id, {
+        english_text: {
+          title: title,
+          body: text,
+        },
+      });
+      const newText = res.data;
+      setEnglishTexts((prevTexts) =>
+        prevTexts.map((prevText) => (prevText.id === newText.id ? newText : prevText))
+      );
+      setSelectedComponent('ShowEnglishText');
+      setSelectedText(newText);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,7 +52,6 @@ const RegisterEnglishText = ({ registerText, setSelectedText }) => {
     }
     try {
       const res = await registerText(title, text);
-      console.log('res', res);
       setSelectedText(res);
     }
     catch (err) {
