@@ -11,6 +11,7 @@ import {
   Button,
   Input,
   Text,
+  Heading,
 } from "@chakra-ui/react";
 import { signUp } from "../lib/api/auth.js";
 import Cookies from "js-cookie";
@@ -26,7 +27,6 @@ export const SignUpModal = ({isOpen, onClose}) => {
       Cookies.set("_access_token", res.headers["access-token"]);
       Cookies.set("_client", res.headers["client"]);
       Cookies.set("_uid", res.headers["uid"]);
-      console.log('res', res);
       navigate("/texts");
     } catch (e) {
       console.log(e);
@@ -45,14 +45,13 @@ export const SignUpModal = ({isOpen, onClose}) => {
         <ModalHeader></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text fontWeight="bold">ユーザー名</Text>
+          <Heading as="h3" size="md" mb="16px">ユーザー登録</Heading>
           <Input
             placeholder="ユーザー名"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
             mb="16px"
           />
-          <Text fontWeight="bold">パスワード</Text>
           <Input
             placeholder="パスワード"
             value={password}

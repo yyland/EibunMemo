@@ -42,7 +42,7 @@ export const updateMemoWord = (params) => {
     return;
 
   // TODO params.Id
-  return client.put(`/memo_words/${params.Id}`, params, {
+  return client.put(`/memo_words/${params.id}`, params, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -51,7 +51,7 @@ export const updateMemoWord = (params) => {
   });
 };
 
-export const deleteMemoWord = (params) => {
+export const deleteMemoWord = (id) => {
   if (
     !Cookies.get('_access_token') ||
     !Cookies.get('_client') ||
@@ -59,8 +59,23 @@ export const deleteMemoWord = (params) => {
   )
     return;
 
-  // TODO params.Id
-  return client.delete(`/memo_words/${params.Id}`, {
+  return client.delete(`/memo_words/${id}`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
+export const getMemosByMemoWord = (id) => {
+  if (
+    !Cookies.get('_access_token') ||
+    !Cookies.get('_client') ||
+    !Cookies.get('_uid')
+  )
+    return;
+  return client.get(`api/memo_words/${id}/memos`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

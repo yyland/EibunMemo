@@ -3,41 +3,9 @@ import Memo from './component/Memo';
 import Menu from './component/Menu';
 import RegisterEnglishText from './component/RegisterEnglishText';
 import ShowEnglishText from './component/ShowEnglishText';
-import { SignUpModal } from './components/SignUpModal';
-import { SignInModal } from './components/SignInModal';
-import axios from 'axios';
-import {
-  Box,
-  Flex,
-  Text,
-  Input,
-  Button,
-  Link as CLink,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-// import { getUser } from '../lib/api/auth.js';
+import { Box, Flex } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { signIn, getUser } from './lib/api/auth.js';
-import Cookies from 'js-cookie';
-import { SignUpButton } from './components/SignUpButton';
-import { SignInButton } from './components/SignInButton';
-import { deleteEnglishText, getEnglishTexts } from './lib/api/englishText';
-import { registerEnglishText } from './lib/api/englishText';
-import { updateEnglishText } from './lib/api/englishText';
-import { getMemoWords } from './lib/api/memoWord';
-import { registerMemoWord } from './lib/api/memoWord';
-import { updateMemoWord } from './lib/api/memoWord';
-import { getMemo } from './lib/api/memo';
-import { registerMemo } from './lib/api/memo';
-import { updateMemo } from './lib/api/memo';
+import { getUser } from './lib/api/auth.js';
 
 const App = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -56,79 +24,15 @@ const App = () => {
     const f = async () => {
       try {
         const res = await getUser();
-        console.log('getUser', res);
-        if (res && res.data.isLogin) {
+        if (res || res.data.isLogin) {
           navigate('/texts');
         }
       } catch (e) {
         console.log(e);
       }
     };
-    console.log('f');
     f();
   }, [navigate]);
-
-  const {
-    isOpen: isSignUpModalOpen,
-    onOpen: onSignUpModalOpen,
-    onClose: onSignUpModalClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isSignInModalOpen,
-    onOpen: onSignInModalOpen,
-    onClose: onSignInModalClose,
-  } = useDisclosure();
-
-  const fetch = async () => {
-    try {
-      const res = await getEnglishTexts();
-      const englishTexts = res.data;
-      setEnglishTexts(englishTexts);
-
-      if (englishTexts.length > 0) {
-        setSelectedText(englishTexts[0]);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-
-    try {
-      const res = await getMemoWords();
-      const savedWords = res.data;
-      setMemoWords(savedWords);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const registerText = async (title, text) => {
-    try {
-      const res = await registerEnglishText({
-        english_text: {
-          title: title,
-          body: text,
-        },
-      });
-      const newText = res.data;
-      setEnglishTexts((prevTexts) => [...prevTexts, newText]);
-      setSelectedComponent('ShowEnglishText');
-      setSelectedText(newText);
-      return res.data;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const deleteText = async (id) => {
-    try {
-      await deleteEnglishText(id);
-      setSelectedText(null);
-      fetch();
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const addMemoWord = (newMemoWord) => {
     setMemoWords([...memoWords, newMemoWord]);
@@ -136,25 +40,23 @@ const App = () => {
 
   return (
     <Flex>
-      <SignUpModal isOpen={isSignUpModalOpen} onClose={onSignUpModalClose} />
-      <SignInModal isOpen={isSignInModalOpen} onClose={onSignInModalClose} />
-      <SignUpButton onSignUpModalOpen={onSignUpModalOpen} />
-      <SignInButton onSignInModalOpen={onSignInModalOpen} />
       <Box width="300px" border="1px" borderColor="gray.200" p="4">
         <Menu
+          setEnglishTexts={setEnglishTexts}
           selectedText={selectedText}
           setSelectedComponent={setSelectedComponent}
           setSelectedText={setSelectedText}
           englishTexts={englishTexts}
-          deleteText={deleteText}
-          onSignUpModalOpen={onSignUpModalOpen}
         />
       </Box>
       <Box flex="2" border="1px" borderColor="gray.200" p="4" overflow="auto">
         {selectedComponent === 'ShowEnglishText' ? (
           <ShowEnglishText
             selectedText={selectedText}
+            setSelectedText={setSelectedText}
+            setEnglishTexts={setEnglishTexts}
             selectedWord={selectedWord}
+            setMemoWords={setMemoWords}
             setSelectedWord={setSelectedWord}
             setSelectedRegisteredWord={setSelectedRegisteredWord}
             startIndex={startIndex}
@@ -166,14 +68,17 @@ const App = () => {
           />
         ) : (
           <RegisterEnglishText
-            registerText={registerEnglishText}
+            setEnglishTexts={setEnglishTexts}
+            englishTexts={englishTexts}
             setSelectedText={setSelectedText}
+            setSelectedComponent={setSelectedComponent}
           />
         )}
       </Box>
       <Box flex="1" border="1px" borderColor="gray.200" p="4" overflow="auto">
         <Memo
           selectedWord={selectedWord}
+          setSelectedRegisteredWord={setSelectedRegisteredWord}
           selectedRegisteredWord={selectedRegisteredWord}
           setDisplayedMemos={setDisplayedMemos}
           displayedMemos={displayedMemos}

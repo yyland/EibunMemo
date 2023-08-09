@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { Box, Text, Button, FormControl, FormLabel, Textarea, VStack, List, ListItem } from "@chakra-ui/react";
-import axios from 'axios';
+import { registerMemo } from '../lib/api/memo';
+import { registerMemoWord } from '../lib/api/memoWord';
+import { getMemosByMemoWord } from '../lib/api/memoWord';
 
-const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, displayedMemos, startIndex, endIndex, selectedText, addMemoWord }) => {
+const Memo = ({ selectedWord, setSelectedRegisteredWord, selectedRegisteredWord, setDisplayedMemos, displayedMemos, startIndex, endIndex, selectedText, addMemoWord }) => {
   const [memo, setMemo] = useState('');
 
   const handleMemoSubmit = async (e) => {
     e.preventDefault();
-    const API_URL = process.env.REACT_APP_API_URL;
-
-  if (selectedRegisteredWord) {
+    if (selectedRegisteredWord) {
       try {
-        await axios.post(`${API_URL}/memos`, {
+        await registerMemo({
         memo: {
           memo_word_id: selectedRegisteredWord.id,
-          memo: memo,
+          body: memo,
         }
       });
       setMemo('');
-      const resMemos = await axios.get(`${API_URL}/memo_words/${selectedRegisteredWord.id}/memos`);
+      const resMemos = await getMemosByMemoWord(`${selectedRegisteredWord.id}`);
       setDisplayedMemos([...resMemos.data]);
       } catch (err) {
         console.error(err);
@@ -26,7 +26,7 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
 
     } else {
       try {
-        const res = await axios.post(`${API_URL}/memo_words`, {
+        const res = await registerMemoWord({
           memo_word: {
             english_text_id: selectedText.id,
             word: selectedWord,
@@ -35,18 +35,19 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
           }
         });
         const wordId = res.data.id;
-        await axios.post(`${API_URL}/memos`, {
+        await registerMemo({
           memo: {
             memo_word_id: wordId,
-            memo: memo,
+            body: memo,
           }
         });
         setMemo('');
 
-        const resMemos = await axios.get(`${API_URL}/memo_words/${wordId}/memos`);
+        const resMemos = await getMemosByMemoWord(`${wordId}`);
         setDisplayedMemos(prevMemos => [...prevMemos, ...resMemos.data]);
 
         addMemoWord(res.data);
+        setSelectedRegisteredWord(res.data);
 
       } catch (err) {
         console.error(err);
@@ -57,16 +58,16 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
   return (
     <VStack as="form" onSubmit={handleMemoSubmit} spacing={0} align="left">
       <FormControl mb={4}>
-        <FormLabel fontSize='md' fontWeight="bold">
-          Selected Word
+        <FormLabel fontSize='1.05rem' fontWeight="bold">
+          Selected Words
         </FormLabel>
         <Box borderWidth="0px" borderRadius="md" p={2} display="flex" alignItems="left">
-          <Text fontSize="md" color="gray.900">
+          <Text fontSize="1.05rem" color="gray.900">
             {selectedRegisteredWord ? selectedRegisteredWord.word : selectedWord}
           </Text>
         </Box>
       </FormControl>
-      <Text mb={2} fontSize='md' fontWeight="bold">
+      <Text mb={2} fontSize='1.05rem' fontWeight="bold">
         Memos
       </Text>
       {displayedMemos.length > 0 && (
@@ -75,7 +76,9 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
             {displayedMemos.map((memoObj, index) => (
               <ListItem key={index}>
                 <Box borderWidth="0px" borderRadius="md" p={2} display="flex" alignItems="left" wordBreak="break-word">
-                  {memoObj.memo}
+                <Text fontSize="1.05rem">
+                  {memoObj.body}
+                </Text>
                 </Box>
               </ListItem>
             ))}

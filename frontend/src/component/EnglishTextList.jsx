@@ -1,5 +1,5 @@
-import { Box, List, ListItem, IconButton } from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { Box, List, ListItem, IconButton, Icon } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { deleteEnglishText } from "../lib/api/englishText";
 
 const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, englishTexts }) => {
@@ -18,21 +18,32 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
   }
 
   return (
-    <Box display="flex" justifyContent="space-between" mt='12px'>
+    <Box display="flex" justifyContent="space-between" mt='px'>
       <List width="100%" maxHeight="80vh" overflowY="auto">
         {englishTexts.map((text) => (
           <ListItem 
             key={text.id} 
+            color="white"
+            width="100%"
             onClick={() => setSelectedText(text)}
-            bg={text === selectedText ? 'gray.200' : null}
-            my={1}
-            p={2}
-            borderRadius="md"
+            bg={text === selectedText ? 'blue.700' : 'blue.800'}
+            _hover={{ bg: 'blue.700' }}
+            my={0}
+            py={2}
+            px={4}
             cursor="pointer"
             display="flex"
             justifyContent="space-between"
             alignItems="center"
+            role="group"  // ListItemがhoverされたときに表示
+            position="relative"
           >
+            <Icon viewBox='0 0 200 200' boxSize='9px' color='gray.400' mr={4} ml={1}>
+              <path
+                fill='currentColor'
+                d='M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0'
+              />
+            </Icon>
             <Box
               flex="1"
               minW="0"
@@ -44,12 +55,17 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
             </Box>
             <IconButton 
               aria-label="Delete text" 
-              icon={<DeleteIcon  />} 
+              icon={<CloseIcon />} 
               size="xs"
               onClick={(e) => {
                 e.stopPropagation();
                 deleteText(text.id);
               }}
+
+              opacity="0"
+              _groupHover={{ opacity: "0.8" }}  // ListItemがhoverされたときに表示
+              pointerEvents="auto"  // ListItemがhoverされていないときでもクリック可能にする
+              colorScheme="white"
             />
           </ListItem>
         ))}

@@ -8,7 +8,6 @@ export const getEnglishTexts = () => {
     !Cookies.get('_uid')
   )
     return;
-  console.log('getEnglishTexts2');
   return client.get('api/english_texts', {
     headers: {
       'access-token': Cookies.get('_access_token'),

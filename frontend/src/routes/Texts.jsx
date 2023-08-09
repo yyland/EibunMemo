@@ -3,39 +3,12 @@ import Memo from '../component/Memo';
 import Menu from '../component/Menu';
 import RegisterEnglishText from '../component/RegisterEnglishText';
 import ShowEnglishText from '../component/ShowEnglishText';
-import { SignUpModal } from '../components/SignUpModal';
-import axios from 'axios';
 import {
   Box,
   Flex,
-  Text,
-  Input,
-  Button,
-  Link as CLink,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-// import { getUser } from '../lib/api/auth.js';
 import { useNavigate } from 'react-router-dom';
-import { signIn, getUser } from '../lib/api/auth.js';
-import Cookies from 'js-cookie';
-import { deleteEnglishText, getEnglishTexts } from '../lib/api/englishText';
-import { registerEnglishText } from '../lib/api/englishText';
-import { updateEnglishText } from '../lib/api/englishText';
-import { getMemoWords } from '../lib/api/memoWord';
-import { registerMemoWord } from '../lib/api/memoWord';
-import { updateMemoWord } from '../lib/api/memoWord';
-import { getMemo } from '../lib/api/memo';
-import { registerMemo } from '../lib/api/memo';
-import { updateMemo } from '../lib/api/memo';
-
+import { getUser } from '../lib/api/auth.js';
 
 const Texts = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -64,16 +37,13 @@ const Texts = () => {
     f();
   }, [navigate]);
 
-
   const addMemoWord = (newMemoWord) => {
     setMemoWords([...memoWords, newMemoWord]);
   };
 
-
-
   return (
-    <Flex>
-      <Box width="300px" border="1px" borderColor="gray.200" p="4">
+    <Flex minHeight="100vh" direction="row">
+      <Box width="240px" border="0px" borderColor="gray.00" bg={'blue.800'}>
         <Menu
           setEnglishTexts={setEnglishTexts}
           selectedText={selectedText}
@@ -82,7 +52,7 @@ const Texts = () => {
           englishTexts={englishTexts}
         />
       </Box>
-      <Box flex="2" border="1px" borderColor="gray.200" p="4" overflow="auto">
+      <Box flex="2" border="1px" borderColor="gray.200" p="4" overflow="auto" bg={'#fefeff'}>
         {selectedComponent === 'ShowEnglishText' ? (
           <ShowEnglishText
             selectedText={selectedText}
@@ -108,9 +78,10 @@ const Texts = () => {
           />
         )}
       </Box>
-      <Box flex="1" border="1px" borderColor="gray.200" p="4" overflow="auto">
+      <Box flex="1" border="0px" borderColor="gray.200" p="4" overflow="auto" bg={'#fdfdff'}>
         <Memo
           selectedWord={selectedWord}
+          setSelectedRegisteredWord={setSelectedRegisteredWord}
           selectedRegisteredWord={selectedRegisteredWord}
           setDisplayedMemos={setDisplayedMemos}
           displayedMemos={displayedMemos}

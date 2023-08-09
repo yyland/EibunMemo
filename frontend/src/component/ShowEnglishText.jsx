@@ -1,17 +1,11 @@
 import { Text, Box, useTheme } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getEnglishTexts } from "../lib/api/englishText";
-import { getMemoWords } from "../lib/api/memoWord";
-import { getMemos } from "../lib/api/memo";
-import { registerMemo } from "../lib/api/memo";
-
-
+import { getMemoWords, getMemosByMemoWord } from "../lib/api/memoWord";
 
 const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selectedWord, setMemoWords, setSelectedRegisteredWord, setSelectedWord, startIndex, setStartIndex, endIndex, setEndIndex, memoWords, setDisplayedMemos }) => {
   
-
   const theme = useTheme();
-
 
   const fetch = async () => {
     try {
@@ -32,15 +26,12 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
     }
   };
 
-
   useEffect(() => {
     fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   const chars = selectedText && selectedText.body ? selectedText.body.split('') : [];
-
 
   const getSelectedWord = () => {
     const selected = window.getSelection().toString().trim();
@@ -165,7 +156,7 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
     setSelectedWord(word.word);
 
     try {
-      const res = await getMemos(`/memo_words/${word.id}/memos`);
+      const res = await getMemosByMemoWord(word.id);
       setDisplayedMemos(prev => [...prev, ...res.data]);
     } catch (err) {
       console.log(err);
@@ -174,9 +165,9 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
   };
 
   return (
-    <Text>
+    <Text p={2} fontSize='1.05rem'>
       {chars.map((char, index) => {
-        const word = memoWords.find(w => w.start_position <= index && w.end_position >= index && w.english_text_id === selectedText.id);
+        const word = memoWords.find(w => w.startPosition <= index && w.endPosition >= index && w.englishTextId === selectedText.id);
         const isSavedWord = !!word;
         return (
           <Box
@@ -193,8 +184,8 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
                                 : '',
               cursor: isSavedWord ? 'pointer' : 'default'
             }}
-            // borderBottom={isSavedWord ? "1px solid gray" : "none"}
-            bg={isSavedWord ? "gray.200" : "transparent"}
+            borderBottom={isSavedWord ? "2px solid gray" : "none"}
+            // bg={isSavedWord ? "gray.200" : "transparent"}
             paddingBottom="1px"
           >
             {char}
@@ -203,9 +194,6 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
       })}
     </Text>
   );
-
-  
-
 };
 
 export default ShowEnglishText;

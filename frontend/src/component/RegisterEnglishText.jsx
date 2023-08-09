@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, FormControl, FormLabel, Input, VStack } from "@chakra-ui/react";
-import { registerEnglishText, updateEnglishText, deleteEnglishText } from '../lib/api/englishText';
+import { registerEnglishText, updateEnglishText } from '../lib/api/englishText';
 
 const RegisterEnglishText = ({ setEnglishTexts, englishTexts, setSelectedText ,setSelectedComponent }) => {
   const [title, setTitle] = useState('');
@@ -43,7 +43,6 @@ const RegisterEnglishText = ({ setEnglishTexts, englishTexts, setSelectedText ,s
       console.error(err);
     }
   }
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
