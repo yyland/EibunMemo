@@ -42,7 +42,7 @@ export const updateMemoWord = (params) => {
     return;
 
   // TODO params.Id
-  return client.put(`/memo_words/${params.id}`, params, {
+  return client.put(`api/memo_words/${params.id}`, params, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -59,7 +59,7 @@ export const deleteMemoWord = (id) => {
   )
     return;
 
-  return client.delete(`/memo_words/${id}`, {
+  return client.delete(`api/memo_words/${id}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

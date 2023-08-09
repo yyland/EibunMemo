@@ -10,7 +10,6 @@ import {
   ModalCloseButton,
   Button,
   Input,
-  Text,
   Heading,
 } from "@chakra-ui/react";
 import { signUp } from "../lib/api/auth.js";

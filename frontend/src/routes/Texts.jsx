@@ -78,13 +78,16 @@ const Texts = () => {
           />
         )}
       </Box>
-      <Box flex="1" border="0px" borderColor="gray.200" p="4" overflow="auto" bg={'#fdfdff'}>
+      <Box flex="1" border="0px" borderColor="gray.200" p="0" overflow="auto" bg={'#fdfdff'}>
         <Memo
           selectedWord={selectedWord}
+          setSelectedWord={setSelectedWord}
           setSelectedRegisteredWord={setSelectedRegisteredWord}
           selectedRegisteredWord={selectedRegisteredWord}
           setDisplayedMemos={setDisplayedMemos}
           displayedMemos={displayedMemos}
+          setMemoWords={setMemoWords}
+          memoWords={memoWords}
           startIndex={startIndex}
           endIndex={endIndex}
           selectedText={selectedText}
