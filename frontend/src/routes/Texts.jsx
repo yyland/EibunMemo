@@ -110,6 +110,7 @@ const Texts = () => {
         position="sticky"
         height="100vh"
         overflowY="auto"
+        top={0}
         bg={'#fdfdff'}
       >
         <Memo

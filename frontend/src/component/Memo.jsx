@@ -70,7 +70,6 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
     }
   }
 
-
   const handleDeleteMemo = async (memoId) => {
     try {
       await deleteMemo(memoId);
@@ -81,24 +80,31 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
   }
 
   return (
-    <VStack as="form" onSubmit={handleMemoSubmit} spacing={0} align="left">
-      <FormControl mb={4}>
-        <FormLabel fontSize='1.05rem' fontWeight="bold" px={4} py={2} mt={2}>
-          Selected Words
-        </FormLabel>
+    <VStack 
+      as="form" 
+      onSubmit={handleMemoSubmit} 
+      spacing={0} 
+      align="left"
+      >
+      <Box
+        position={"sticky"}
+        top="0"
+        zIndex={1}
+        bg={'#fdfdff'}
+        boxShadow="0px 1px 4px rgba(0, 0, 0, 0.1)"
+      >
         <Box 
-          borderWidth="0px" 
-          borderRadius="md" 
           px={6} 
+          pt={7}
+          pb={6}
           display="flex" 
           alignItems="left" 
           justifyContent="space-between"
-          position="sticky"
-          top="0"
+          overflowY="auto"
           bg={'#fdfdff'}
           role={selectedRegisteredWord ? "group" : undefined}
         >
-          <Text fontSize="1.05rem" color="gray.900">
+          <Text fontSize="1.1rem" color="gray.900" fontWeight={'semibold'}>
             {selectedRegisteredWord ? selectedRegisteredWord.word : selectedWord}
           </Text>
           {selectedRegisteredWord && (
@@ -119,20 +125,21 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
             />
           )}
         </Box>
-      </FormControl>
+      </Box>
 
-      <Text mb={2} fontSize='1.05rem' fontWeight="bold" px={4} py={2}>
-        Memos
-      </Text>
       {displayedMemos.length > 0 && (
-        <Box mb={4}>
-          <List styleType="none">
+        <Box py={4}>
+          <List 
+            styleType="none" 
+            height={"calc(100vh - 320px)"} 
+            overflowY={'auto'}
+          >
             {displayedMemos.map((memoObj, index) => (
               <ListItem key={index}>
               <Box 
                 borderWidth="0px" 
                 borderRadius="md" 
-                px={6} 
+                pl={5} 
                 py={2}
                 display="flex" 
                 alignItems="left" 
@@ -144,7 +151,13 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
                   backgroundColor: "#f6f6fc",
                 }}
               >
-                <Text fontSize="1.05rem">
+                <Text 
+                  fontSize="1.05rem"
+                  width="100%"
+                  whiteSpace="normal"
+                  textAlign="justify"  
+                  pr={2}
+                >
                   {memoObj.body}
                 </Text>
                 <IconButton 
@@ -169,10 +182,35 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
           </List>
         </Box>
       )}
-      <FormControl my={4}>
-        <Textarea value={memo} onChange={(e) => setMemo(e.target.value)} />
-      </FormControl>
-      <Button type="submit">Register</Button>
+
+      <Box 
+        position="sticky" 
+        bottom="0"
+        zIndex={1}
+        px={2}
+      >
+        <FormControl mb={2}>
+          <Textarea 
+            value={memo} 
+            onChange={(e) => setMemo(e.target.value)} 
+            size="lg"  
+            height="150px" 
+            width="100%"  
+        />
+        </FormControl>
+
+        <Box textAlign="right" mr={2}>
+          <Button 
+            type="submit" 
+            colorScheme="blue"
+            size="sm"
+            backgroundColor="blue.500"
+            _hover={{ bg: "blue.600" }} 
+          >
+            Register
+          </Button>
+        </Box>
+      </Box>
     </VStack>
   );
 };
