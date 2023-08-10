@@ -103,6 +103,7 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
           overflowY="auto"
           bg={'#fdfdff'}
           role={selectedRegisteredWord ? "group" : undefined}
+          _hover={{ bg: "#f6f6fc" }}
         >
           <Text fontSize="1.1rem" color="gray.900" fontWeight={'semibold'}>
             {selectedRegisteredWord ? selectedRegisteredWord.word : selectedWord}
