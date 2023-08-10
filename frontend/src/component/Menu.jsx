@@ -1,10 +1,13 @@
 import EnglishTextList from "./EnglishTextList";
-import { useDisclosure, VStack, Box, Link, Icon } from "@chakra-ui/react";
-import { AddIcon, UnlockIcon, EditIcon } from "@chakra-ui/icons";
+import { useDisclosure, VStack, Box, Button, Menu as ChakraMenu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
+import { ChevronDownIcon, SettingsIcon } from "@chakra-ui/icons";
 import { SignUpModal } from '../components/SignUpModal';
 import { SignInModal } from '../components/SignInModal';
+import { SignInButton, SignUpButton, SignOutButton, NewTextButton } from '../components/MenuButton';
+import { signOut } from '../lib/api/auth.js';
+import { useNavigate } from 'react-router-dom';
 
-const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedText, englishTexts, deleteText }) => {
+const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedText, englishTexts, deleteText, isLoggedIn, setIsLoggedIn, userName }) => {
 
   const {
     isOpen: isSignUpModalOpen,
@@ -18,43 +21,51 @@ const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedT
     onClose: onSignInModalClose,
   } = useDisclosure();
 
-  return (
-    <VStack spacing={2} align="start" w="100%" maxWidth="800px" bgColor="blue.800">
- 
-      <VStack spacing={0} align="stretch" w="full" py={4}>
-        <Link 
-          onClick={onSignUpModalOpen} 
-          py={2}
-          px={4}
-          color="white" 
-          _hover={{ textDecoration: 'none', bg: 'blue.700' }}
-        >
-          <Icon as={AddIcon} mr={2} /> ユーザー登録
-        </Link> 
-        <Link 
-          onClick={onSignInModalOpen} 
-          py={2}
-          px={4}
-          color="white" 
-          _hover={{ textDecoration: 'none', bg: 'blue.700' }}
-        >
-          <Icon as={UnlockIcon} mr={2} /> ログイン
-        </Link> 
-      </VStack>
+  const navigate = useNavigate();
 
-      <Box w="max-content" border="0px solid" borderColor="gray.500" borderRadius="md" mx={1}>
-        <Link 
-          onClick={() => setSelectedComponent('RegisterEnglishText')}
-          py={2}
-          pl={3}
-          color="white" 
-          display="block"
-          minWidth="230px"
-          _hover={{ textDecoration: 'none', bg: 'blue.700' }}
-        >
-          <Icon as={EditIcon} mr={2} /> New Text
-        </Link>
+  const logOut = async () => {
+    try {
+      const res = await signOut();
+      if (res) {
+        console.log('res: ', res);
+        setIsLoggedIn(false);
+        navigate('/');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  return (
+    <VStack 
+      spacing={2} 
+      align="start" 
+      w="100%" 
+      maxWidth="400px" 
+      bgColor="blue.800" 
+      position="relative" 
+      overflow="hidden"
+    >
+
+      {!isLoggedIn && (
+        <>
+          <Box height="2px" w="full"></Box>
+          <VStack spacing={0} align="stretch" w="full">
+            <SignUpButton onSignUpModalOpen={onSignUpModalOpen} />
+            <SignInButton onSignInModalOpen={onSignInModalOpen} />
+          </VStack>
+          <SignUpModal isOpen={isSignUpModalOpen} onClose={onSignUpModalClose} />
+          <SignInModal isOpen={isSignInModalOpen} onClose={onSignInModalClose} />
+        </>
+      )}
+
+      <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
+
+      <Box w="full">
+        <NewTextButton setSelectedComponent={setSelectedComponent} />
       </Box>
+
+      <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
 
       <Box w="full">
         <EnglishTextList 
@@ -65,8 +76,49 @@ const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedT
         />
       </Box>
 
-      <SignUpModal isOpen={isSignUpModalOpen} onClose={onSignUpModalClose} />
-      <SignInModal isOpen={isSignInModalOpen} onClose={onSignInModalClose} />
+      {isLoggedIn && (
+        <Box 
+          position="fixed"
+          bottom="0"  // VStack の下部に固定
+          w="full"
+          bgColor="blue.800"
+          py={2}
+          borderTop="2px solid"
+          borderColor="whiteAlpha.100"
+        >
+          <ChakraMenu>
+            <MenuButton
+              as={Button}
+              leftIcon={<SettingsIcon boxSize="0.8em" marginTop="0.125em" marginRight={"0.25em"} marginLeft={"0.11em"} />}
+              pr={6}
+              iconSpacing="0.6em"
+              color="white"
+              bg="transparent"
+              _hover={{ bg: "rgba(255, 255, 255, 0.1)" }}
+              _active={{ bg: "transparent" }}
+            >
+              <Text fontSize="md" fontWeight="normal" lineHeight="1.2em" letterSpacing="0.05em">
+                {userName}
+              </Text>
+            </MenuButton>
+            <MenuList bg="blue.900" borderColor="gray.600" borderWidth="1px" padding={0}>
+              <MenuItem
+                color="white"
+                bg="transparent"
+                py={3}
+                pl={9}
+                _hover={{ bg: "rgba(255, 255, 255, 0.1)"}}
+                _expanded={{ bg: "transparent" }}
+                onClick={logOut}
+              >
+                Log Out
+              </MenuItem>
+            </MenuList>
+          </ChakraMenu>
+        </Box>
+      )}
+
+
     </VStack>
   );
 };

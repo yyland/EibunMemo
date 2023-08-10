@@ -165,7 +165,13 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
   };
 
   return (
-    <Text p={2} fontSize='1.05rem'>
+    <Text
+      p={3}
+      fontSize='lg'
+      width="100%"
+      whiteSpace="normal"
+      textAlign="justify"
+    >
       {chars.map((char, index) => {
         const word = memoWords.find(w => w.startPosition <= index && w.endPosition >= index && w.englishTextId === selectedText.id);
         const isSavedWord = !!word;

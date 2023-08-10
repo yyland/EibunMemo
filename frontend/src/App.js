@@ -17,6 +17,7 @@ const App = () => {
   const [selectedRegisteredWord, setSelectedRegisteredWord] = useState(null);
   const [startIndex, setStartIndex] = useState(null);
   const [endIndex, setEndIndex] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,8 +25,12 @@ const App = () => {
     const f = async () => {
       try {
         const res = await getUser();
-        if (res || res.data.isLogin) {
+        if (res && res.data.isLogin) {
+          setIsLoggedIn(true);
           navigate('/texts');
+        } else {
+          setIsLoggedIn(false);
+          navigate('/');
         }
       } catch (e) {
         console.log(e);
@@ -39,17 +44,26 @@ const App = () => {
   };
 
   return (
-    <Flex>
-      <Box width="300px" border="1px" borderColor="gray.200" p="4">
+    <Flex minHeight="100vh" direction="row">
+      <Box width="260px" borderColor="gray.00" bg={'blue.800'}>
         <Menu
           setEnglishTexts={setEnglishTexts}
           selectedText={selectedText}
           setSelectedComponent={setSelectedComponent}
           setSelectedText={setSelectedText}
           englishTexts={englishTexts}
+          isLoggedIn={isLoggedIn}
         />
       </Box>
-      <Box flex="2" border="1px" borderColor="gray.200" p="4" overflow="auto">
+      <Box
+        flex="2"
+        border="1px"
+        borderColor="gray.200"
+        px="4"
+        py={2}
+        overflow="auto"
+        bg={'#fefeff'}
+      >
         {selectedComponent === 'ShowEnglishText' ? (
           <ShowEnglishText
             selectedText={selectedText}
@@ -75,13 +89,22 @@ const App = () => {
           />
         )}
       </Box>
-      <Box flex="1" border="1px" borderColor="gray.200" p="4" overflow="auto">
+      <Box
+        flex="1"
+        border="0px"
+        borderColor="gray.200"
+        overflow="auto"
+        bg={'#fdfdff'}
+      >
         <Memo
           selectedWord={selectedWord}
+          setSelectedWord={setSelectedWord}
           setSelectedRegisteredWord={setSelectedRegisteredWord}
           selectedRegisteredWord={selectedRegisteredWord}
           setDisplayedMemos={setDisplayedMemos}
           displayedMemos={displayedMemos}
+          setMemoWords={setMemoWords}
+          memoWords={memoWords}
           startIndex={startIndex}
           endIndex={endIndex}
           selectedText={selectedText}

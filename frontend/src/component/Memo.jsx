@@ -83,7 +83,7 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
   return (
     <VStack as="form" onSubmit={handleMemoSubmit} spacing={0} align="left">
       <FormControl mb={4}>
-        <FormLabel fontSize='1.05rem' fontWeight="bold" px={4} py={2} mt={4}>
+        <FormLabel fontSize='1.05rem' fontWeight="bold" px={4} py={2} mt={2}>
           Selected Words
         </FormLabel>
         <Box 
@@ -93,7 +93,9 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
           display="flex" 
           alignItems="left" 
           justifyContent="space-between"
-          position="relative"
+          position="sticky"
+          top="0"
+          bg={'#fdfdff'}
           role={selectedRegisteredWord ? "group" : undefined}
         >
           <Text fontSize="1.05rem" color="gray.900">

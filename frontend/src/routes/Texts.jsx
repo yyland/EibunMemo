@@ -20,6 +20,8 @@ const Texts = () => {
   const [selectedRegisteredWord, setSelectedRegisteredWord] = useState(null);
   const [startIndex, setStartIndex] = useState(null);
   const [endIndex, setEndIndex] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState(null);
 
   const navigate = useNavigate();
 
@@ -27,7 +29,11 @@ const Texts = () => {
     const f = async () => {
       try {
         const res = await getUser();
-        if (!res || !res.data.isLogin) {
+        if (res && res.data.isLogin) {
+          setUserName(res.data.data.username);
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
           navigate('/');
         }
       } catch (e) {
@@ -43,16 +49,36 @@ const Texts = () => {
 
   return (
     <Flex minHeight="100vh" direction="row">
-      <Box width="240px" border="0px" borderColor="gray.00" bg={'blue.800'}>
+      <Box
+        width="330px" 
+        borderColor="gray.00" 
+        bg={'blue.800'}
+        height={'100vh'}
+        position="sticky"
+        top="0"
+      >
         <Menu
           setEnglishTexts={setEnglishTexts}
           selectedText={selectedText}
           setSelectedComponent={setSelectedComponent}
           setSelectedText={setSelectedText}
           englishTexts={englishTexts}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          userName={userName}
         />
       </Box>
-      <Box flex="2" border="1px" borderColor="gray.200" p="4" overflow="auto" bg={'#fefeff'}>
+      <Box
+        flex="2"
+        border="1px"
+        borderColor="gray.200"
+        px="4"
+        py={2}
+        height={'100vh'}
+        position="sticky"
+        overflow="auto"
+        bg={'#fefeff'}
+      >
         {selectedComponent === 'ShowEnglishText' ? (
           <ShowEnglishText
             selectedText={selectedText}
@@ -78,7 +104,14 @@ const Texts = () => {
           />
         )}
       </Box>
-      <Box flex="1" border="0px" borderColor="gray.200" p="0" overflow="auto" bg={'#fdfdff'}>
+      <Box
+        flex="1"
+        borderColor="gray.200"
+        position="sticky"
+        height="100vh"
+        overflowY="auto"
+        bg={'#fdfdff'}
+      >
         <Memo
           selectedWord={selectedWord}
           setSelectedWord={setSelectedWord}

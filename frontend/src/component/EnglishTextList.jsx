@@ -18,8 +18,24 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
   }
 
   return (
-    <Box display="flex" justifyContent="space-between" mt='px'>
-      <List width="100%" maxHeight="80vh" overflowY="auto">
+    <Box 
+      display="flex" 
+      justifyContent="space-between" 
+      height="calc(100vh - 135px)"
+    >
+      <List 
+        width="100%" 
+        overflowY="auto"
+        css={{
+          '&::-webkit-scrollbar': {
+            width: '9px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#718096',
+            borderRadius: '5px',
+          },
+        }}
+      >
         {englishTexts.map((text) => (
           <ListItem 
             key={text.id} 
