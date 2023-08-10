@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
-import { Box, Text, Button, FormControl, FormLabel, Textarea, VStack, List, ListItem, IconButton } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+import { Box, Text, Button, FormControl, Textarea, VStack, List, ListItem, IconButton } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { registerMemo } from '../lib/api/memo';
 import { registerMemoWord } from '../lib/api/memoWord';
 import { getMemosByMemoWord } from '../lib/api/memoWord';
 import { deleteMemo } from '../lib/api/memo';
 import { deleteMemoWord } from '../lib/api/memoWord';
+import { updateMemo } from '../lib/api/memo';
 
 const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, selectedRegisteredWord, setDisplayedMemos, displayedMemos, setMemoWords, memoWords, startIndex, endIndex, selectedText, addMemoWord }) => {
   const [memo, setMemo] = useState('');
+  const [isEditing, setIsEditing] = useState(false); 
+  const [editingMemoId, setEditingMemoId] = useState(null); 
+  const [openMenuId, setOpenMenuId] = useState(null);
 
   const handleMemoSubmit = async (e) => {
     e.preventDefault();
+
+    if (isEditing) {
+      try {
+        await handleEditSave();
+      } catch (err) {
+        console.error(err);
+      }
+      return;
+    }
+
     if (selectedRegisteredWord) {
       try {
         await registerMemo({
@@ -79,6 +94,33 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
     }
   }
 
+  const handleEditStart = (memoId, memoBody) => {
+    setIsEditing(true);
+    setEditingMemoId(memoId);
+    setMemo(memoBody);
+  };
+
+  const handleEditSave = async () => {
+    try {
+      await updateMemo({
+        id: editingMemoId,
+        memo: {
+          memo_word_id: selectedRegisteredWord.id,
+          body: memo,
+        }
+      });
+      setIsEditing(false);
+      setEditingMemoId(null);
+      setMemo('');
+    } catch (err) {
+      console.error(err);
+    }
+
+    const resMemos = await getMemosByMemoWord(`${selectedRegisteredWord.id}`);
+    setDisplayedMemos([...resMemos.data]);
+  };
+
+  
   return (
     <VStack 
       as="form" 
@@ -108,6 +150,7 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
           <Text fontSize="1.1rem" color="gray.900" fontWeight={'semibold'}>
             {selectedRegisteredWord ? selectedRegisteredWord.word : selectedWord}
           </Text>
+
           {selectedRegisteredWord && (
             <IconButton 
               aria-label="Delete selected word" 
@@ -132,7 +175,7 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
         <Box py={4}>
           <List 
             styleType="none" 
-            height={"calc(100vh - 320px)"} 
+            height={"calc(100vh - 330px)"} 
             overflowY={'auto'}
           >
             {displayedMemos.map((memoObj, index) => (
@@ -140,7 +183,8 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
               <Box 
                 borderWidth="0px" 
                 borderRadius="md" 
-                pl={5} 
+                pl={5}
+                pr={1} 
                 py={2}
                 display="flex" 
                 alignItems="left" 
@@ -157,33 +201,53 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
                   width="100%"
                   whiteSpace="normal"
                   textAlign="justify"  
-                  pr={2}
+                  pr={1}
                 >
                   {memoObj.body}
                 </Text>
-                <IconButton 
-                  aria-label="Delete memo" 
-                  icon={<CloseIcon />} 
-                  size="xs"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteMemo(memoObj.id);
-                  }}
-                  opacity="0"
-                  _groupHover={{ opacity: "0.8" }}
-                  pointerEvents="auto"
-                  colorScheme="black"
-                  variant="outline"
-                  border={'none'}
-                />
+                
+                {selectedRegisteredWord && (
+                  <Menu 
+                    isOpen={openMenuId === memoObj.id} 
+                    onClose={() => setOpenMenuId(null)}
+                  >
+                    <MenuButton
+                      as={IconButton}
+                      aria-label="Options"
+                      icon={<EditIcon />}
+                      size="sm"
+                      opacity="0"
+                      _groupHover={{ opacity: "0.8" }}
+                      pointerEvents="auto"
+                      colorScheme="black"
+                      variant="outline"
+                      border={'none'}
+                      onClick={() => setOpenMenuId(memoObj.id)}
+                    />
+                    <MenuList>
+                      <MenuItem onClick={() => {
+                        handleEditStart(memoObj.id, memoObj.body);
+                        setOpenMenuId(null);
+                      }}>
+                        Edit
+                      </MenuItem>
+                      <MenuItem onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteMemo(memoObj.id);
+                        setOpenMenuId(null);
+                      }}>
+                        Delete
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                  )
+                }
               </Box>
             </ListItem>
-            
             ))}
           </List>
         </Box>
       )}
-
       <Box 
         position="sticky" 
         bottom="0"
@@ -201,15 +265,27 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
         </FormControl>
 
         <Box textAlign="right" mr={2}>
-          <Button 
-            type="submit" 
-            colorScheme="blue"
-            size="sm"
-            backgroundColor="blue.500"
-            _hover={{ bg: "blue.600" }} 
-          >
-            Register
-          </Button>
+          {isEditing ? (
+            <Button 
+              type="submit" 
+              colorScheme="blue"
+              size="sm"
+              backgroundColor="blue.500"
+              _hover={{ bg: "blue.600" }} 
+            >
+              Save
+            </Button>
+          ) : (
+            <Button 
+              type="submit" 
+              colorScheme="blue"
+              size="sm"
+              backgroundColor="blue.500"
+              _hover={{ bg: "blue.600" }} 
+            >
+              Register
+            </Button>
+          )}
         </Box>
       </Box>
     </VStack>

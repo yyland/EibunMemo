@@ -41,8 +41,7 @@ export const updateMemo = (params) => {
   )
     return;
 
-  // TODO params.Id
-  return client.put(`api/memo_words/${params.Id}`, params, {
+  return client.put(`api/memos/${params.id}`, params, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -52,7 +51,6 @@ export const updateMemo = (params) => {
 };
 
 export const deleteMemo = (id) => {
-  console.log('deleteMemo', id);
   if (
     !Cookies.get('_access_token') ||
     !Cookies.get('_client') ||
@@ -60,7 +58,6 @@ export const deleteMemo = (id) => {
   )
     return;
 
-  console.log('deleteMemo', id);
   return client.delete(`api/memos/${id}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
