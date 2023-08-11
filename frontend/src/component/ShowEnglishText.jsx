@@ -13,7 +13,7 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
       const englishTexts = resTexts.data;
       setEnglishTexts(englishTexts);
 
-      if (englishTexts.length > 0) {
+      if (englishTexts.length > 0 && !selectedText) {
         setSelectedText(englishTexts[0]);
       }
 
@@ -148,7 +148,6 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
     }
     return false;
   };
-
 
   const handleWordClick = async (word) => {
 
