@@ -1,22 +1,42 @@
 import React, { useState } from 'react';
-import { Box, Text, Button, FormControl, FormLabel, Textarea, VStack, List, ListItem } from "@chakra-ui/react";
-import axios from 'axios';
+import { Box, Text, Button, FormControl, Textarea, VStack, List, ListItem, IconButton } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { registerMemo } from '../lib/api/memo';
+import { registerMemoWord } from '../lib/api/memoWord';
+import { getMemosByMemoWord } from '../lib/api/memoWord';
+import { deleteMemo } from '../lib/api/memo';
+import { deleteMemoWord } from '../lib/api/memoWord';
+import { updateMemo } from '../lib/api/memo';
 
-const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, displayedMemos, startIndex, endIndex, selectedText, addMemoWord }) => {
+const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, selectedRegisteredWord, setDisplayedMemos, displayedMemos, setMemoWords, memoWords, startIndex, endIndex, selectedText, addMemoWord }) => {
   const [memo, setMemo] = useState('');
+  const [isEditing, setIsEditing] = useState(false); 
+  const [editingMemoId, setEditingMemoId] = useState(null); 
+  const [openMenuId, setOpenMenuId] = useState(null);
 
   const handleMemoSubmit = async (e) => {
     e.preventDefault();
+
+    if (isEditing) {
+      try {
+        await handleEditSave();
+      } catch (err) {
+        console.error(err);
+      }
+      return;
+    }
+
     if (selectedRegisteredWord) {
       try {
-        await axios.post('https://api.eibunmemo.com/api/memos', {
+        await registerMemo({
         memo: {
           memo_word_id: selectedRegisteredWord.id,
-          memo: memo,
+          body: memo,
         }
       });
       setMemo('');
-      const resMemos = await axios.get(`https://api.eibunmemo.com/api/memo_words/${selectedRegisteredWord.id}/memos`);
+      const resMemos = await getMemosByMemoWord(`${selectedRegisteredWord.id}`);
       setDisplayedMemos([...resMemos.data]);
       } catch (err) {
         console.error(err);
@@ -24,7 +44,7 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
 
     } else {
       try {
-        const res = await axios.post('https://api.eibunmemo.com/api/memo_words', {
+        const res = await registerMemoWord({
           memo_word: {
             english_text_id: selectedText.id,
             word: selectedWord,
@@ -33,18 +53,19 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
           }
         });
         const wordId = res.data.id;
-        await axios.post('https://api.eibunmemo.com/api/memos', {
+        await registerMemo({
           memo: {
             memo_word_id: wordId,
-            memo: memo,
+            body: memo,
           }
         });
         setMemo('');
 
-        const resMemos = await axios.get(`https://api.eibunmemo.com/api/memo_words/${wordId}/memos`);
+        const resMemos = await getMemosByMemoWord(`${wordId}`);
         setDisplayedMemos(prevMemos => [...prevMemos, ...resMemos.data]);
 
         addMemoWord(res.data);
+        setSelectedRegisteredWord(res.data);
 
       } catch (err) {
         console.error(err);
@@ -52,38 +73,221 @@ const Memo = ({ selectedWord, selectedRegisteredWord, setDisplayedMemos, display
     }
   };
 
+  const handleDeleteSelectedWord = async (wordId) => {
+    try {
+      await deleteMemoWord(wordId);
+      setSelectedRegisteredWord(null);
+      setSelectedWord('');
+      setDisplayedMemos([]);
+      setMemoWords(prevWords => prevWords.filter(word => word.id !== wordId));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const handleDeleteMemo = async (memoId) => {
+    try {
+      await deleteMemo(memoId);
+      setDisplayedMemos(prevMemos => prevMemos.filter(memo => memo.id !== memoId));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const handleEditStart = (memoId, memoBody) => {
+    setIsEditing(true);
+    setEditingMemoId(memoId);
+    setMemo(memoBody);
+  };
+
+  const handleEditSave = async () => {
+    try {
+      await updateMemo({
+        id: editingMemoId,
+        memo: {
+          memo_word_id: selectedRegisteredWord.id,
+          body: memo,
+        }
+      });
+      setIsEditing(false);
+      setEditingMemoId(null);
+      setMemo('');
+    } catch (err) {
+      console.error(err);
+    }
+
+    const resMemos = await getMemosByMemoWord(`${selectedRegisteredWord.id}`);
+    setDisplayedMemos([...resMemos.data]);
+  };
+
+  
   return (
-    <VStack as="form" onSubmit={handleMemoSubmit} spacing={0} align="left">
-      <FormControl mb={4}>
-        <FormLabel fontSize='md' fontWeight="bold">
-          Selected Word
-        </FormLabel>
-        <Box borderWidth="0px" borderRadius="md" p={2} display="flex" alignItems="left">
-          <Text fontSize="md" color="gray.900">
+    <VStack 
+      as="form" 
+      onSubmit={handleMemoSubmit} 
+      spacing={0} 
+      align="left"
+      >
+      <Box
+        position={"sticky"}
+        top="0"
+        zIndex={1}
+        bg={'#fdfdff'}
+        boxShadow="0px 1px 4px rgba(0, 0, 0, 0.1)"
+      >
+        <Box 
+          px={6} 
+          pt={7}
+          pb={6}
+          display="flex" 
+          alignItems="left" 
+          justifyContent="space-between"
+          overflowY="auto"
+          bg={'#fdfdff'}
+          role={selectedRegisteredWord ? "group" : undefined}
+          _hover={{ bg: "#f6f6fc" }}
+        >
+          <Text fontSize="1.1rem" color="gray.900" fontWeight={'semibold'}>
             {selectedRegisteredWord ? selectedRegisteredWord.word : selectedWord}
           </Text>
+
+          {selectedRegisteredWord && (
+            <IconButton 
+              aria-label="Delete selected word" 
+              icon={<CloseIcon />} 
+              size="xs"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteSelectedWord(selectedRegisteredWord.id);
+              }}
+              opacity="0"
+              _groupHover={{ opacity: "0.8" }}
+              pointerEvents="auto"
+              colorScheme="black"
+              variant="outline"
+              border={'none'}
+            />
+          )}
         </Box>
-      </FormControl>
-      <Text mb={2} fontSize='md' fontWeight="bold">
-        Memos
-      </Text>
+      </Box>
+
       {displayedMemos.length > 0 && (
-        <Box mb={4}>
-          <List styleType="none">
+        <Box py={4}>
+          <List 
+            styleType="none" 
+            height={"calc(100vh - 330px)"} 
+            overflowY={'auto'}
+          >
             {displayedMemos.map((memoObj, index) => (
               <ListItem key={index}>
-                <Box borderWidth="0px" borderRadius="md" p={2} display="flex" alignItems="left" wordBreak="break-word">
-                  {memoObj.memo}
-                </Box>
-              </ListItem>
+              <Box 
+                borderWidth="0px" 
+                borderRadius="md" 
+                pl={5}
+                pr={1} 
+                py={2}
+                display="flex" 
+                alignItems="left" 
+                justifyContent="space-between"
+                position="relative"
+                role="group"
+                wordBreak="break-word"
+                _hover={{
+                  backgroundColor: "#f6f6fc",
+                }}
+              >
+                <Text 
+                  fontSize="1.05rem"
+                  width="100%"
+                  whiteSpace="normal"
+                  textAlign="justify"  
+                  pr={1}
+                >
+                  {memoObj.body}
+                </Text>
+                
+                {selectedRegisteredWord && (
+                  <Menu 
+                    isOpen={openMenuId === memoObj.id} 
+                    onClose={() => setOpenMenuId(null)}
+                  >
+                    <MenuButton
+                      as={IconButton}
+                      aria-label="Options"
+                      icon={<EditIcon />}
+                      size="sm"
+                      opacity="0"
+                      _groupHover={{ opacity: "0.8" }}
+                      pointerEvents="auto"
+                      colorScheme="black"
+                      variant="outline"
+                      border={'none'}
+                      onClick={() => setOpenMenuId(memoObj.id)}
+                    />
+                    <MenuList>
+                      <MenuItem onClick={() => {
+                        handleEditStart(memoObj.id, memoObj.body);
+                        setOpenMenuId(null);
+                      }}>
+                        Edit
+                      </MenuItem>
+                      <MenuItem onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteMemo(memoObj.id);
+                        setOpenMenuId(null);
+                      }}>
+                        Delete
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                  )
+                }
+              </Box>
+            </ListItem>
             ))}
           </List>
         </Box>
       )}
-      <FormControl my={4}>
-        <Textarea value={memo} onChange={(e) => setMemo(e.target.value)} />
-      </FormControl>
-      <Button type="submit">Register</Button>
+      <Box 
+        position="sticky" 
+        bottom="0"
+        zIndex={1}
+        px={2}
+      >
+        <FormControl mb={2}>
+          <Textarea 
+            value={memo} 
+            onChange={(e) => setMemo(e.target.value)} 
+            size="lg"  
+            height="150px" 
+            width="100%"  
+        />
+        </FormControl>
+
+        <Box textAlign="right" mr={2}>
+          {isEditing ? (
+            <Button 
+              type="submit" 
+              colorScheme="blue"
+              size="sm"
+              backgroundColor="blue.500"
+              _hover={{ bg: "blue.600" }} 
+            >
+              Save
+            </Button>
+          ) : (
+            <Button 
+              type="submit" 
+              colorScheme="blue"
+              size="sm"
+              backgroundColor="blue.500"
+              _hover={{ bg: "blue.600" }} 
+            >
+              Register
+            </Button>
+          )}
+        </Box>
+      </Box>
     </VStack>
   );
 };

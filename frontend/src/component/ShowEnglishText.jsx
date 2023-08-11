@@ -1,14 +1,37 @@
 import { Text, Box, useTheme } from "@chakra-ui/react";
-import axios from "axios";
+import { useEffect } from "react";
+import { getEnglishTexts } from "../lib/api/englishText";
+import { getMemoWords, getMemosByMemoWord } from "../lib/api/memoWord";
 
-
-const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord, setSelectedWord, startIndex, setStartIndex, endIndex, setEndIndex, memoWords, setDisplayedMemos }) => {
-
+const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selectedWord, setMemoWords, setSelectedRegisteredWord, setSelectedWord, startIndex, setStartIndex, endIndex, setEndIndex, memoWords, setDisplayedMemos }) => {
+  
   const theme = useTheme();
 
-  if (!selectedText) return <Box></Box>;
+  const fetch = async () => {
+    try {
+      const resTexts = await getEnglishTexts();
+      const englishTexts = resTexts.data;
+      setEnglishTexts(englishTexts);
 
-  const chars = selectedText.text.split('');
+      if (englishTexts.length > 0 && !selectedText) {
+        setSelectedText(englishTexts[0]);
+      }
+
+      const resWords = await getMemoWords();
+      const savedWords = resWords.data;
+      setMemoWords(savedWords);
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const chars = selectedText && selectedText.body ? selectedText.body.split('') : [];
 
   const getSelectedWord = () => {
     const selected = window.getSelection().toString().trim();
@@ -126,14 +149,13 @@ const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord
     return false;
   };
 
-
   const handleWordClick = async (word) => {
 
     setDisplayedMemos([]);
     setSelectedWord(word.word);
 
     try {
-      const res = await axios.get(`https://api.eibunmemo.com/api/memo_words/${word.id}/memos`);
+      const res = await getMemosByMemoWord(word.id);
       setDisplayedMemos(prev => [...prev, ...res.data]);
     } catch (err) {
       console.log(err);
@@ -142,9 +164,15 @@ const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord
   };
 
   return (
-    <Text>
+    <Text
+      p={3}
+      fontSize='lg'
+      width="100%"
+      whiteSpace="normal"
+      textAlign="justify"
+    >
       {chars.map((char, index) => {
-        const word = memoWords.find(w => w.start_position <= index && w.end_position >= index && w.english_text_id === selectedText.id);
+        const word = memoWords.find(w => w.startPosition <= index && w.endPosition >= index && w.englishTextId === selectedText.id);
         const isSavedWord = !!word;
         return (
           <Box
@@ -161,8 +189,8 @@ const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord
                                 : '',
               cursor: isSavedWord ? 'pointer' : 'default'
             }}
-            // borderBottom={isSavedWord ? "1px solid gray" : "none"}
-            bg={isSavedWord ? "gray.200" : "transparent"}
+            borderBottom={isSavedWord ? "2px solid gray" : "none"}
+            // bg={isSavedWord ? "gray.200" : "transparent"}
             paddingBottom="1px"
           >
             {char}
@@ -171,9 +199,6 @@ const ShowEnglishText = ({ selectedText, selectedWord, setSelectedRegisteredWord
       })}
     </Text>
   );
-
-  
-
 };
 
 export default ShowEnglishText;

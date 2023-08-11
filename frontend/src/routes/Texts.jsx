@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import Memo from './component/Memo';
-import Menu from './component/Menu';
-import RegisterEnglishText from './component/RegisterEnglishText';
-import ShowEnglishText from './component/ShowEnglishText';
-import { Box, Flex } from '@chakra-ui/react';
+import Memo from '../component/Memo';
+import Menu from '../component/Menu';
+import RegisterEnglishText from '../component/RegisterEnglishText';
+import ShowEnglishText from '../component/ShowEnglishText';
+import {
+  Box,
+  Flex,
+} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { getUser } from './lib/api/auth.js';
+import { getUser } from '../lib/api/auth.js';
 
-const App = () => {
+const Texts = () => {
   const [memoWords, setMemoWords] = useState([]);
   const [displayedMemos, setDisplayedMemos] = useState([]);
   const [selectedText, setSelectedText] = useState(null);
@@ -18,6 +21,7 @@ const App = () => {
   const [startIndex, setStartIndex] = useState(null);
   const [endIndex, setEndIndex] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState(null);
 
   const navigate = useNavigate();
 
@@ -26,8 +30,8 @@ const App = () => {
       try {
         const res = await getUser();
         if (res && res.data.isLogin) {
+          setUserName(res.data.data.username);
           setIsLoggedIn(true);
-          navigate('/texts');
         } else {
           setIsLoggedIn(false);
           navigate('/');
@@ -45,7 +49,14 @@ const App = () => {
 
   return (
     <Flex minHeight="100vh" direction="row">
-      <Box width="260px" borderColor="gray.00" bg={'blue.800'}>
+      <Box
+        width="330px" 
+        borderColor="gray.00" 
+        bg={'blue.800'}
+        height={'100vh'}
+        position="sticky"
+        top="0"
+      >
         <Menu
           setEnglishTexts={setEnglishTexts}
           selectedText={selectedText}
@@ -53,6 +64,8 @@ const App = () => {
           setSelectedText={setSelectedText}
           englishTexts={englishTexts}
           isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          userName={userName}
         />
       </Box>
       <Box
@@ -61,6 +74,8 @@ const App = () => {
         borderColor="gray.200"
         px="4"
         py={2}
+        height={'100vh'}
+        position="sticky"
         overflow="auto"
         bg={'#fefeff'}
       >
@@ -91,9 +106,11 @@ const App = () => {
       </Box>
       <Box
         flex="1"
-        border="0px"
         borderColor="gray.200"
-        overflow="auto"
+        position="sticky"
+        height="100vh"
+        overflowY="auto"
+        top={0}
         bg={'#fdfdff'}
       >
         <Memo
@@ -115,4 +132,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Texts;
