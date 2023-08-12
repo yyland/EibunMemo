@@ -3,10 +3,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { deleteEnglishText } from "../lib/api/englishText";
 
 const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, englishTexts, setSelectedComponent }) => {
-
-  console.log('selectedText: ', selectedText);
-
-
+  
   const deleteText = async (id) => {
     try {
       await deleteEnglishText(id);
