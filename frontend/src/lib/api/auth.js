@@ -25,7 +25,6 @@ export const getUser = () => {
     !Cookies.get('_client') ||
     !Cookies.get('_uid')
   ) {
-    console.log('getUser: no token');
     return;
   }
 
