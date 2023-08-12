@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-1
-  ECS_SERVICE: eibunmemo-service-52-2
+  ECS_SERVICE: eibunmemo-service-52-4
   ECS_CLUSTER: eibunmemo-rails-cluster
   ECS_TASK_DEFINITION: eibunmemo-task-52
 
@@ -145,6 +145,8 @@ jobs:
 
       - name: Build project
         run: yarn run build
+        env:
+          REACT_APP_URL: ${{ secrets.REACT_APP_URL }}
 
       - name: Debug current directory
         run: |
