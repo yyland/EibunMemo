@@ -2,7 +2,7 @@ class Api::MemosController < ApplicationController
   before_action :authenticate_user!
   before_action :set_memo, only: [:show, :update, :destroy]
   before_action :ensure_user_owns_memo, only: [:show, :update, :destroy]
-  
+
   def index
     @memos = Memo.joins(memo_word: :english_text).where(english_texts: { user_id: current_user.id })
     render json: @memos
@@ -39,10 +39,10 @@ class Api::MemosController < ApplicationController
   end
 
   def ensure_user_owns_memo
-    unless @memo && @memo.memo_word.english_text.user == current_user
-      render status: :not_found
-      return
-    end
+    return if @memo && @memo.memo_word.english_text.user == current_user
+
+    render status: :not_found
+    nil
   end
 
   def memo_params

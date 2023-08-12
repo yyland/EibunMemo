@@ -6,7 +6,7 @@ class Api::MemoWordsController < ApplicationController
   def index
     @memo_words = MemoWord.joins(:english_text).where(english_texts: { user_id: current_user.id })
     render json: @memo_words
-  end  
+  end
 
   def show
     render json: @memo_word
@@ -52,9 +52,9 @@ class Api::MemoWordsController < ApplicationController
   end
 
   def ensure_user_owns_memo_word
-    unless current_user.english_texts.include?(@memo_word.english_text)
-      render status: :forbidden
-    end
+    return if current_user.english_texts.include?(@memo_word.english_text)
+
+    render status: :forbidden
   end
 
   def memo_word_params
