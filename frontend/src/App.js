@@ -64,29 +64,33 @@ const App = () => {
         overflow="auto"
         bg={'#fefeff'}
       >
-        {selectedComponent === 'ShowEnglishText' && isLoggedIn ? (
-          <ShowEnglishText
-            selectedText={selectedText}
-            setSelectedText={setSelectedText}
-            setEnglishTexts={setEnglishTexts}
-            selectedWord={selectedWord}
-            setMemoWords={setMemoWords}
-            setSelectedWord={setSelectedWord}
-            setSelectedRegisteredWord={setSelectedRegisteredWord}
-            startIndex={startIndex}
-            setStartIndex={setStartIndex}
-            endIndex={endIndex}
-            setEndIndex={setEndIndex}
-            memoWords={memoWords}
-            setDisplayedMemos={setDisplayedMemos}
-          />
+        {isLoggedIn ? (
+          selectedComponent === 'ShowEnglishText' ? (
+            <ShowEnglishText
+              selectedText={selectedText}
+              setSelectedText={setSelectedText}
+              setEnglishTexts={setEnglishTexts}
+              selectedWord={selectedWord}
+              setMemoWords={setMemoWords}
+              setSelectedWord={setSelectedWord}
+              setSelectedRegisteredWord={setSelectedRegisteredWord}
+              startIndex={startIndex}
+              setStartIndex={setStartIndex}
+              endIndex={endIndex}
+              setEndIndex={setEndIndex}
+              memoWords={memoWords}
+              setDisplayedMemos={setDisplayedMemos}
+            />
+          ) : (
+            <RegisterEnglishText
+              setEnglishTexts={setEnglishTexts}
+              englishTexts={englishTexts}
+              setSelectedText={setSelectedText}
+              setSelectedComponent={setSelectedComponent}
+            />
+          )
         ) : (
-          <RegisterEnglishText
-            setEnglishTexts={setEnglishTexts}
-            englishTexts={englishTexts}
-            setSelectedText={setSelectedText}
-            setSelectedComponent={setSelectedComponent}
-          />
+          <Box></Box>
         )}
       </Box>
       <Box
