@@ -27,7 +27,6 @@ const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedT
     try {
       const res = await signOut();
       if (res) {
-        console.log('res: ', res);
         setIsLoggedIn(false);
         navigate('/');
       }
@@ -61,21 +60,23 @@ const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedT
 
       <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
 
-      <>
-        <Box w="full">
-          <NewTextButton setSelectedComponent={setSelectedComponent} />
-        </Box>
-        <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
-        <Box w="full">
-          <EnglishTextList 
-            setEnglishTexts={setEnglishTexts} 
-            selectedText={selectedText} 
-            setSelectedText={setSelectedText} 
-            englishTexts={englishTexts} 
-            setSelectedComponent={setSelectedComponent}
-          />
-        </Box>
-      </>
+      {isLoggedIn && (
+        <>
+          <Box w="full">
+            <NewTextButton setSelectedComponent={setSelectedComponent} />
+          </Box>
+          <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
+          <Box w="full">
+            <EnglishTextList 
+              setEnglishTexts={setEnglishTexts} 
+              selectedText={selectedText} 
+              setSelectedText={setSelectedText} 
+              englishTexts={englishTexts} 
+              setSelectedComponent={setSelectedComponent}
+            />
+          </Box>
+        </>
+      )}
 
       {isLoggedIn && (
         <Box 
