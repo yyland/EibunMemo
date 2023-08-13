@@ -79,30 +79,32 @@ const Texts = () => {
         overflow="auto"
         bg={'#fefeff'}
       >
-        {selectedComponent === 'ShowEnglishText' ? (
-          <ShowEnglishText
-            selectedText={selectedText}
-            setSelectedText={setSelectedText}
-            setEnglishTexts={setEnglishTexts}
-            selectedWord={selectedWord}
-            setMemoWords={setMemoWords}
-            setSelectedWord={setSelectedWord}
-            setSelectedRegisteredWord={setSelectedRegisteredWord}
-            startIndex={startIndex}
-            setStartIndex={setStartIndex}
-            endIndex={endIndex}
-            setEndIndex={setEndIndex}
-            memoWords={memoWords}
-            setDisplayedMemos={setDisplayedMemos}
-          />
-        ) : (
-          <RegisterEnglishText
-            setEnglishTexts={setEnglishTexts}
-            englishTexts={englishTexts}
-            setSelectedText={setSelectedText}
-            setSelectedComponent={setSelectedComponent}
-          />
-        )}
+        {isLoggedIn ? (
+          selectedComponent === 'ShowEnglishText' ? (
+            <ShowEnglishText
+              selectedText={selectedText}
+              setSelectedText={setSelectedText}
+              setEnglishTexts={setEnglishTexts}
+              selectedWord={selectedWord}
+              setMemoWords={setMemoWords}
+              setSelectedWord={setSelectedWord}
+              setSelectedRegisteredWord={setSelectedRegisteredWord}
+              startIndex={startIndex}
+              setStartIndex={setStartIndex}
+              endIndex={endIndex}
+              setEndIndex={setEndIndex}
+              memoWords={memoWords}
+              setDisplayedMemos={setDisplayedMemos}
+            />
+          ) : (
+            <RegisterEnglishText
+              setEnglishTexts={setEnglishTexts}
+              englishTexts={englishTexts}
+              setSelectedText={setSelectedText}
+              setSelectedComponent={setSelectedComponent}
+            />
+          )
+        ) : <Box></Box>}
       </Box>
       <Box
         flex="1"
