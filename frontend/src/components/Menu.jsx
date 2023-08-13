@@ -60,6 +60,15 @@ const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedT
 
       <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
 
+      {!isLoggedIn && (
+        <Text fontSize="sm" color="whiteAlpha.900" textAlign="left" mt={2} ml={4}>
+          <br />
+          サンプルの英文が登録されています。<br /><br />
+          ユーザー名 : guest<br />
+          パスワード : password
+        </Text>  
+      )}
+
       {isLoggedIn && (
         <>
           <Box w="full">
