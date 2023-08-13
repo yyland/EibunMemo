@@ -2,7 +2,7 @@
 
 ### アプリのURL
 
-[www.eibunmemo.com](https://www.eibunmemmo.com)
+[www.eibunmemo.com](https://www.eibunmemo.com)
 
 ### メインイメージ
 
