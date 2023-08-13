@@ -64,7 +64,7 @@ const App = () => {
         overflow="auto"
         bg={'#fefeff'}
       >
-        {selectedComponent === 'ShowEnglishText' ? (
+        {selectedComponent === 'ShowEnglishText' && isLoggedIn ? (
           <ShowEnglishText
             selectedText={selectedText}
             setSelectedText={setSelectedText}

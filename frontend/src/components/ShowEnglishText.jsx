@@ -10,7 +10,7 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
   const fetch = async () => {
     try {
       const resTexts = await getEnglishTexts();
-      if (!resTexts) {
+      if (!resTexts || !resTexts.data) {
         return;
       }
       const englishTexts = resTexts.data;
