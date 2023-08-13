@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Memo from './component/Memo';
-import Menu from './component/Menu';
-import RegisterEnglishText from './component/RegisterEnglishText';
-import ShowEnglishText from './component/ShowEnglishText';
+import Memo from './components/Memo';
+import Menu from './components/Menu';
+import RegisterEnglishText from './components/RegisterEnglishText';
+import ShowEnglishText from './components/ShowEnglishText';
 import { Box, Flex } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { getUser } from './lib/api/auth.js';
@@ -45,7 +45,7 @@ const App = () => {
 
   return (
     <Flex minHeight="100vh" direction="row">
-      <Box width="260px" borderColor="gray.00" bg={'blue.800'}>
+      <Box width="330px" borderColor="gray.00" bg={'blue.800'}>
         <Menu
           setEnglishTexts={setEnglishTexts}
           selectedText={selectedText}

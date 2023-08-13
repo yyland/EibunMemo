@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Memo from '../component/Memo';
-import Menu from '../component/Menu';
-import RegisterEnglishText from '../component/RegisterEnglishText';
-import ShowEnglishText from '../component/ShowEnglishText';
+import Memo from '../components/Memo';
+import Menu from '../components/Menu';
+import RegisterEnglishText from '../components/RegisterEnglishText';
+import ShowEnglishText from '../components/ShowEnglishText';
 import {
   Box,
   Flex,
@@ -126,6 +126,7 @@ const Texts = () => {
           endIndex={endIndex}
           selectedText={selectedText}
           addMemoWord={addMemoWord}
+          isLoggedIn={isLoggedIn}
         />
       </Box>
     </Flex>

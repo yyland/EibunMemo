@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Link, Icon } from "@chakra-ui/react";
+import { Link, Icon } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 
 export const SignUpButton = ({onSignUpModalOpen}) => {
