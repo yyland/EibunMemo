@@ -70,8 +70,9 @@
 | Database       | MySQL(8.0.33)                                        |
 | Environment    | Docker(20.10.24)                                     |
 | CI/CD          | GitHub Actions                                       |
+| Monitoring     | Sentry, Route53                                      |
 | Design         | PlantUML, draw.io(diagrams.net)                      |
-| etc.           | ESLint, Prettier, rubocop, Git, GitHub               |
+| etc.           | ESLint, RuboCop, RSpec, Git, GitHub                  |
 
 <br>
 
