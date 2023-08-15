@@ -27,12 +27,15 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
         overflowY="auto"
         css={{
           '&::-webkit-scrollbar': {
-            width: '9px',
+            width: '7px',
           },
           '&::-webkit-scrollbar-thumb': {
             backgroundColor: '#718096',
             borderRadius: '5px',
           },
+          /* Firefox */
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#718096 transparent',
         }}
       >
         {englishTexts.map((text) => (
