@@ -27,7 +27,7 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
         overflowY="auto"
         css={{
           '&::-webkit-scrollbar': {
-            width: '9px',
+            width: '7px',
           },
           '&::-webkit-scrollbar-thumb': {
             backgroundColor: '#718096',
