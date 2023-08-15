@@ -33,6 +33,9 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
             backgroundColor: '#718096',
             borderRadius: '5px',
           },
+          /* Firefox */
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#718096 transparent',
         }}
       >
         {englishTexts.map((text) => (
