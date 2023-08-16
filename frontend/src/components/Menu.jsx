@@ -6,6 +6,7 @@ import { SignInModal } from '../components/SignInModal';
 import { SignInButton, SignUpButton, NewTextButton } from '../components/MenuButton';
 import { signOut } from '../lib/api/auth.js';
 import { useNavigate } from 'react-router-dom';
+import { Avatar } from "@chakra-ui/avatar";
 
 const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedText, englishTexts, deleteText, isLoggedIn, setIsLoggedIn, userName }) => {
 
@@ -71,7 +72,7 @@ const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedT
 
       {isLoggedIn && (
         <>
-          <Box w="full">
+          <Box w="full" marginLeft={"0.05em"}>
             <NewTextButton setSelectedComponent={setSelectedComponent} />
           </Box>
           <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
@@ -100,7 +101,15 @@ const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedT
           <ChakraMenu>
             <MenuButton
               as={Button}
-              leftIcon={<SettingsIcon boxSize="0.8em" marginTop="0.125em" marginRight={"0.25em"} marginLeft={"0.11em"} />}
+              leftIcon={
+                <Avatar 
+                  size="xs" 
+                  name={userName} 
+                  marginLeft={"-0.3em"}
+                  color={"whiteAlpha.900"}
+                  bgColor="blue.600"
+                />
+              }
               pr={6}
               iconSpacing="0.6em"
               color="white"
