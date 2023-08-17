@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, FormControl, FormLabel, Textarea, VStack, HStack  } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, VStack, HStack } from "@chakra-ui/react";
+import TextareaAutosize from 'react-textarea-autosize';
 import { registerEnglishText } from '../lib/api/englishText';
 
 const RegisterEnglishText = ({ setEnglishTexts, setSelectedText, setSelectedComponent }) => {
@@ -42,22 +43,22 @@ const RegisterEnglishText = ({ setEnglishTexts, setSelectedText, setSelectedComp
     <VStack as="form" onSubmit={handleSubmit} spacing={4}>
       <FormControl>
         <FormLabel>Title</FormLabel>
-        <Textarea 
+        <TextareaAutosize
+          minRows={2}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter title here..."
-          resize="vertical"
-          rows={2}
+          placeholder="Title..."
+          style={{ resize: 'vertical', width: '100%', padding: '0.5rem', borderRadius: '0.25rem' }}
         />
       </FormControl>
       <FormControl>
         <FormLabel>Text</FormLabel>
-        <Textarea 
+        <TextareaAutosize
+          minRows={5}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Enter text here..."
-          resize="vertical"
-          rows={30}
+          placeholder="Text..."
+          style={{ resize: 'vertical', width: '100%', padding: '0.5rem', borderRadius: '0.25rem' }}
         />
       </FormControl>
       <HStack width="100%" justifyContent="flex-end">
