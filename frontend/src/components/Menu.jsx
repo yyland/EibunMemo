@@ -1,25 +1,12 @@
 import EnglishTextList from "./EnglishTextList";
-import { useDisclosure, VStack, Box, Button, Menu as ChakraMenu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
-import { SignUpModal } from '../components/SignUpModal';
-import { SignInModal } from '../components/SignInModal';
-import { SignInButton, SignUpButton, NewTextButton } from '../components/MenuButton';
+import { VStack, Box, Button, Menu as ChakraMenu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
+import { NewTextButton } from '../components/MenuButton';
 import { signOut } from '../lib/api/auth.js';
 import { useNavigate } from 'react-router-dom';
 import { Avatar } from "@chakra-ui/avatar";
+import { UnauthenticatedHeader } from "./UnauthenticatedHeader";
 
-const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedText, englishTexts, deleteText, isLoggedIn, setIsLoggedIn, userName }) => {
-
-  const {
-    isOpen: isSignUpModalOpen,
-    onOpen: onSignUpModalOpen,
-    onClose: onSignUpModalClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isSignInModalOpen,
-    onOpen: onSignInModalOpen,
-    onClose: onSignInModalClose,
-  } = useDisclosure();
+const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedText, englishTexts, isLoggedIn, setIsLoggedIn, userName }) => {
 
   const navigate = useNavigate();
 
@@ -47,31 +34,12 @@ const Menu = ({setEnglishTexts, selectedText, setSelectedComponent, setSelectedT
     >
 
       {!isLoggedIn && (
-        <>
-          <Box height="2px" w="full"></Box>
-          <VStack spacing={0} align="stretch" w="full">
-            <SignUpButton onSignUpModalOpen={onSignUpModalOpen} />
-            <SignInButton onSignInModalOpen={onSignInModalOpen} />
-          </VStack>
-          <SignUpModal isOpen={isSignUpModalOpen} onClose={onSignUpModalClose} />
-          <SignInModal isOpen={isSignInModalOpen} onClose={onSignInModalClose} />
-        </>
-      )}
-
-      <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
-
-      {!isLoggedIn && (
-        <Text fontSize="sm" color="whiteAlpha.900" textAlign="left" mt={2} ml={4}>
-          <br />
-          サンプルの英文が登録されています。<br /><br />
-          ユーザー名 : guest<br />
-          パスワード : password
-        </Text>  
+        <UnauthenticatedHeader />
       )}
 
       {isLoggedIn && (
         <>
-          <Box w="full" marginLeft={"0.05em"}>
+          <Box w="full" marginLeft={"0.05em"} marginTop={"2.5"}>
             <NewTextButton setSelectedComponent={setSelectedComponent} />
           </Box>
           <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
