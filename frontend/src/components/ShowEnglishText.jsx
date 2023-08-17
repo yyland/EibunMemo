@@ -171,7 +171,7 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
       p={3}
       fontSize='lg'
       width="100%"
-      whiteSpace="normal"
+      whiteSpace="pre-wrap"
       textAlign="justify"
     >
       {chars.map((char, index) => {
