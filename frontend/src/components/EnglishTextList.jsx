@@ -47,7 +47,7 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
               setSelectedText(text);
               setSelectedComponent('ShowEnglishText');
             }}
-            bg={text === selectedText ? 'blue.700' : 'blue.800'}
+            bg={text.id === selectedText?.id ? 'blue.700' : 'blue.800'}
             _hover={{ bg: 'blue.700' }}
             my={0}
             py={2}

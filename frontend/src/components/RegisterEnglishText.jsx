@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Button, FormControl, FormLabel, Input, VStack } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Textarea, VStack, HStack  } from "@chakra-ui/react";
 import { registerEnglishText } from '../lib/api/englishText';
 
-const RegisterEnglishText = ({ setEnglishTexts, englishTexts, setSelectedText ,setSelectedComponent }) => {
+const RegisterEnglishText = ({ setEnglishTexts, setSelectedText, setSelectedComponent }) => {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-
 
   const registerText = async (title, text) => {
     try {
@@ -43,13 +42,35 @@ const RegisterEnglishText = ({ setEnglishTexts, englishTexts, setSelectedText ,s
     <VStack as="form" onSubmit={handleSubmit} spacing={4}>
       <FormControl>
         <FormLabel>Title</FormLabel>
-        <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <Textarea 
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter title here..."
+          resize="vertical"
+          rows={2}
+        />
       </FormControl>
       <FormControl>
         <FormLabel>Text</FormLabel>
-        <Input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+        <Textarea 
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Enter text here..."
+          resize="vertical"
+          rows={30}
+        />
       </FormControl>
-      <Button type="submit">Register</Button>
+      <HStack width="100%" justifyContent="flex-end">
+        <Button 
+          type="submit" 
+          colorScheme="blue"
+          size="sm"
+          backgroundColor="blue.500"
+          _hover={{ bg: "blue.600" }}
+        >
+          Register
+        </Button>
+      </HStack>
     </VStack>
   );
 };
