@@ -23,27 +23,19 @@ export const MemoForm = ({ memo, isEditing, setMemo }) => {
       </FormControl>
 
       <Box textAlign="right">
-        {isEditing ? (
-          <Button 
-            type="submit" 
-            colorScheme="blue"
-            size="sm"
-            backgroundColor="blue.500"
-            _hover={{ bg: "blue.600" }} 
-          >
-            Save
-          </Button>
-        ) : (
-          <Button 
-            type="submit" 
-            colorScheme="blue"
-            size="sm"
-            backgroundColor="blue.500"
-            _hover={{ bg: "blue.600" }} 
-          >
-            Register
-          </Button>
-        )}
+        <Button 
+          type="submit" 
+          colorScheme="blue"
+          size="sm"
+          backgroundColor="blue.500"
+          _hover={{ bg: "blue.600" }} 
+        >
+          {isEditing ? (
+            "Save"
+          ) : (
+            "Register"
+          )}
+        </Button>
       </Box>
     </>
   )
