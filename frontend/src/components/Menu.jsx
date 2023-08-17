@@ -1,6 +1,5 @@
 import EnglishTextList from "./EnglishTextList";
 import { useDisclosure, VStack, Box, Button, Menu as ChakraMenu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
-import { SettingsIcon } from "@chakra-ui/icons";
 import { SignUpModal } from '../components/SignUpModal';
 import { SignInModal } from '../components/SignInModal';
 import { SignInButton, SignUpButton, NewTextButton } from '../components/MenuButton';
