@@ -48,7 +48,13 @@ const RegisterEnglishText = ({ setEnglishTexts, setSelectedText, setSelectedComp
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title..."
-          style={{ resize: 'vertical', width: '100%', padding: '0.5rem', borderRadius: '0.25rem' }}
+          style={{ 
+            resize: 'vertical', 
+            width: '100%', 
+            padding: '0.5rem', 
+            borderRadius: '0.25rem',
+            border: '2px solid #e2e8f0',
+          }}
         />
       </FormControl>
       <FormControl>
@@ -58,7 +64,13 @@ const RegisterEnglishText = ({ setEnglishTexts, setSelectedText, setSelectedComp
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Text..."
-          style={{ resize: 'vertical', width: '100%', padding: '0.5rem', borderRadius: '0.25rem' }}
+          style={{ 
+            resize: 'vertical', 
+            width: '100%', 
+            padding: '0.5rem', 
+            borderRadius: '0.25rem',
+            border: '2px solid #e2e8f0',
+          }}
         />
       </FormControl>
       <HStack width="100%" justifyContent="flex-end">
