@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Text, Button, FormControl, Textarea, VStack, List, ListItem, IconButton } from "@chakra-ui/react";
+import { Box, Text, VStack, List, ListItem, IconButton } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { registerMemo } from '../lib/api/memo';
@@ -8,8 +8,22 @@ import { getMemosByMemoWord } from '../lib/api/memoWord';
 import { deleteMemo } from '../lib/api/memo';
 import { deleteMemoWord } from '../lib/api/memoWord';
 import { updateMemo } from '../lib/api/memo';
+import { MemoForm } from './MemoForm';
 
-const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, selectedRegisteredWord, setDisplayedMemos, displayedMemos, setMemoWords, memoWords, startIndex, endIndex, selectedText, addMemoWord, isLoggedIn }) => {
+const Memo = ({ 
+  selectedWord, 
+  setSelectedWord, 
+  setSelectedRegisteredWord, 
+  selectedRegisteredWord, 
+  setDisplayedMemos, 
+  displayedMemos, 
+  setMemoWords,
+  startIndex, 
+  endIndex, 
+  selectedText, 
+  addMemoWord, 
+  isLoggedIn 
+}) => {
   const [memo, setMemo] = useState('');
   const [isEditing, setIsEditing] = useState(false); 
   const [editingMemoId, setEditingMemoId] = useState(null); 
@@ -175,7 +189,7 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
           <Box py={4}>
             <List 
               styleType="none" 
-              height={"calc(100vh - 330px)"} 
+              height={"calc(100vh - 280px)"} 
               overflowY={'auto'}
             >
               {displayedMemos.map((memoObj, index) => (
@@ -199,7 +213,7 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
                   <Text 
                     fontSize="1.05rem"
                     width="100%"
-                    whiteSpace="normal"
+                    whiteSpace="pre-wrap"
                     textAlign="justify"  
                     pr={1}
                   >
@@ -249,46 +263,17 @@ const Memo = ({ selectedWord, setSelectedWord, setSelectedRegisteredWord, select
           </Box>
         )}
 
-        
         <Box 
           position="sticky" 
           bottom="0"
           zIndex={1}
           px={2}
         >
-          <FormControl mb={2}>
-            <Textarea 
-              value={memo} 
-              onChange={(e) => setMemo(e.target.value)} 
-              size="lg"  
-              height="150px" 
-              width="100%"  
-          />
-          </FormControl>
-
-          <Box textAlign="right" mr={2}>
-            {isEditing ? (
-              <Button 
-                type="submit" 
-                colorScheme="blue"
-                size="sm"
-                backgroundColor="blue.500"
-                _hover={{ bg: "blue.600" }} 
-              >
-                Save
-              </Button>
-            ) : (
-              <Button 
-                type="submit" 
-                colorScheme="blue"
-                size="sm"
-                backgroundColor="blue.500"
-                _hover={{ bg: "blue.600" }} 
-              >
-                Register
-              </Button>
-            )}
-          </Box>
+          <MemoForm
+            memo={memo}
+            setMemo={setMemo}
+            isEditing={isEditing}
+          ></MemoForm>
         </Box>
       </VStack>
   ) : null;
