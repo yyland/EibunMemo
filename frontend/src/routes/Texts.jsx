@@ -123,7 +123,6 @@ const Texts = () => {
           setDisplayedMemos={setDisplayedMemos}
           displayedMemos={displayedMemos}
           setMemoWords={setMemoWords}
-          memoWords={memoWords}
           startIndex={startIndex}
           endIndex={endIndex}
           selectedText={selectedText}
