@@ -9,6 +9,7 @@ import { deleteMemo } from '../lib/api/memo';
 import { deleteMemoWord } from '../lib/api/memoWord';
 import { updateMemo } from '../lib/api/memo';
 import { MemoForm } from './MemoForm';
+import { MemoHeader } from './MemoHeader';
 
 const Memo = ({ 
   selectedWord, 
@@ -149,47 +150,18 @@ const Memo = ({
           bg={'#fdfdff'}
           boxShadow="0px 1px 4px rgba(0, 0, 0, 0.1)"
         >
-          <Box 
-            px={6} 
-            pt={7}
-            pb={6}
-            display="flex" 
-            alignItems="left" 
-            justifyContent="space-between"
-            overflowY="auto"
-            bg={'#fdfdff'}
-            role={selectedRegisteredWord ? "group" : undefined}
-            _hover={{ bg: "#f6f6fc" }}
-          >
-            <Text fontSize="1.1rem" color="gray.900" fontWeight={'semibold'}>
-              {selectedRegisteredWord ? selectedRegisteredWord.word : selectedWord}
-            </Text>
-
-            {selectedRegisteredWord && (
-              <IconButton 
-                aria-label="Delete selected word" 
-                icon={<CloseIcon />} 
-                size="xs"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteSelectedWord(selectedRegisteredWord.id);
-                }}
-                opacity="0"
-                _groupHover={{ opacity: "0.8" }}
-                pointerEvents="auto"
-                colorScheme="black"
-                variant="outline"
-                border={'none'}
-              />
-            )}
-          </Box>
+          <MemoHeader
+            selectedWord={selectedWord}
+            selectedRegisteredWord={selectedRegisteredWord}
+            handleDeleteSelectedWord={handleDeleteSelectedWord}
+          ></MemoHeader>
         </Box>
 
         {displayedMemos.length > 0 && (
           <Box py={4}>
             <List 
               styleType="none" 
-              height={"calc(100vh - 280px)"} 
+              height={"calc(100vh - 295px)"} 
               overflowY={'auto'}
             >
               {displayedMemos.map((memoObj, index) => (

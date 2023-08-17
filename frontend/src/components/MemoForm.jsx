@@ -15,6 +15,7 @@ export const MemoForm = ({ memo, isEditing, setMemo }) => {
           style={{
             resize: 'vertical', 
             width: '100%', 
+            padding: '0.5rem', 
             borderRadius: '0.25rem',
             border: '2px solid #e2e8f0',
           }}
