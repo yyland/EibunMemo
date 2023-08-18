@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { getUser } from '../lib/api/auth.js';
+import { getEnglishTexts } from '../lib/api/englishText.js';
 
 const Texts = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -26,7 +27,7 @@ const Texts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const f = async () => {
+    const fetchUser = async () => {
       try {
         const res = await getUser();
         if (res && res.data.isLogin) {
@@ -40,8 +41,28 @@ const Texts = () => {
         console.log(e);
       }
     };
-    f();
-  }, [navigate]);
+
+    const fetchEnglishTexts = async () => {
+      try {
+        const resTexts = await getEnglishTexts();
+        if (!resTexts || !resTexts.data) {
+          return;
+        }
+        const texts = resTexts.data;
+        setEnglishTexts(texts);
+        if (texts.length > 0 && !selectedText) {
+          setSelectedText(texts[0]);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUser();
+    fetchEnglishTexts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   return (
     <Flex minHeight="100vh" direction="row">
@@ -80,8 +101,6 @@ const Texts = () => {
           selectedComponent === 'ShowEnglishText' ? (
             <ShowEnglishText
               selectedText={selectedText}
-              setSelectedText={setSelectedText}
-              setEnglishTexts={setEnglishTexts}
               selectedWord={selectedWord}
               setMemoWords={setMemoWords}
               setSelectedWord={setSelectedWord}
@@ -96,7 +115,6 @@ const Texts = () => {
           ) : (
             <RegisterEnglishText
               setEnglishTexts={setEnglishTexts}
-              englishTexts={englishTexts}
               setSelectedText={setSelectedText}
               setSelectedComponent={setSelectedComponent}
             />
