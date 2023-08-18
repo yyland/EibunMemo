@@ -10,6 +10,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { getUser } from '../lib/api/auth.js';
 import { getEnglishTexts } from '../lib/api/englishText.js';
+import { getMemoWordsByEnglishText } from '../lib/api/englishText';
 
 const Texts = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -46,23 +47,44 @@ const Texts = () => {
       try {
         const resTexts = await getEnglishTexts();
         if (!resTexts || !resTexts.data) {
-          return;
+          return null;
         }
         const texts = resTexts.data;
         setEnglishTexts(texts);
         if (texts.length > 0 && !selectedText) {
           setSelectedText(texts[0]);
+          return texts[0];
         }
+        return null;
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+    };
+
+    const fetchMemoWords = async (text) => {
+      try {
+        if (!text) return;
+        const resWords = await getMemoWordsByEnglishText(text.id);
+        if (!resWords || !resWords.data) {
+          return;
+        }
+        const words = resWords.data;
+        setMemoWords(words);
       } catch (err) {
         console.error(err);
       }
     };
 
-    fetchUser();
-    fetchEnglishTexts();
+    const fetchData = async () => {
+      await fetchUser();
+      const firstText = await fetchEnglishTexts();
+      await fetchMemoWords(firstText);
+    };
+
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   return (
     <Flex minHeight="100vh" direction="row">
