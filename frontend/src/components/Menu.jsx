@@ -1,9 +1,10 @@
 import EnglishTextList from "./EnglishTextList";
-import { VStack, Box } from "@chakra-ui/react";
+import { VStack, HStack, Box } from "@chakra-ui/react";
 import { NewTextButton } from '../components/MenuButton';
 import { UnauthenticatedHeader } from "./UnauthenticatedHeader";
 import { UserProfileMenu } from "./UserProfileMenu";
 import WordList from "./WordList";
+import { ModeSelectMenu } from "./ModeSelectMenu";
 
 const Menu = ({
   setEnglishTexts, 
@@ -72,15 +73,19 @@ const Menu = ({
 
           <Box 
             position="fixed"
-            bottom="0"  // VStack の下部に固定
+            bottom="0"
             w="full"
             bgColor="blue.800"
             py={2}
             borderTop="2px solid"
             borderColor="whiteAlpha.100"
           >
-            <UserProfileMenu setIsLoggedIn={setIsLoggedIn} userName={userName} />
+            <HStack spacing={8}>
+              <UserProfileMenu setIsLoggedIn={setIsLoggedIn} userName={userName} />
+              <ModeSelectMenu mode={mode} setMode={setMode} />
+            </HStack>
           </Box>
+
         </>
       )}
     </VStack>
