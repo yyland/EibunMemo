@@ -35,28 +35,36 @@ export const UserProfileMenu = ({ setIsLoggedIn, userName }) => {
           <Avatar 
             size="xs" 
             name={userName} 
-            marginLeft={"-0.3em"}
+            marginLeft={"-0.8em"}
             color={"whiteAlpha.900"}
             bgColor="blue.600"
           />
         }
-        pr={6}
-        iconSpacing="0.6em"
+        pr={4}
+        iconSpacing="0.4em"
         color="white"
         bg="transparent"
         _hover={{ bg: "blue.700" }}
         _active={{ bg: "transparent" }}
       >
-        <Text fontSize="md" fontWeight="normal" lineHeight="1.2em" letterSpacing="0.05em">
+        <Text 
+          fontSize="md" 
+          fontWeight="normal" 
+          lineHeight="1.2em" 
+          letterSpacing="0.03em"
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
+        >
           {userName}
         </Text>
       </MenuButton>
-      <MenuList bg="blue.900" borderColor="gray.600" borderWidth="1px" padding={0}>
+      <MenuList bg="blue.900" borderColor="gray.600" borderWidth="1px" >
         <MenuItem
           color="white"
           bg="transparent"
           py={3}
-          pl={9}
+          pl={8}
           _hover={{ bg: "blue.700"}}
           _expanded={{ bg: "transparent" }}
           onClick={logOut}

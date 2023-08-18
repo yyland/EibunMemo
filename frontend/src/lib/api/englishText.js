@@ -8,6 +8,7 @@ export const getEnglishTexts = () => {
     !Cookies.get('_uid')
   )
     return;
+
   return client.get('api/english_texts', {
     headers: {
       'access-token': Cookies.get('_access_token'),
@@ -24,6 +25,7 @@ export const registerEnglishText = (params) => {
     !Cookies.get('_uid')
   )
     return;
+
   return client.post('api/english_texts', params, {
     headers: {
       'access-token': Cookies.get('_access_token'),
@@ -41,7 +43,6 @@ export const getEnglishText = (id) => {
   )
     return;
 
-  console.log(id);
   return client.get(`api/english_texts/${id}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),

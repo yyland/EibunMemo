@@ -80,7 +80,7 @@ const Menu = ({
             borderTop="2px solid"
             borderColor="whiteAlpha.100"
           >
-            <HStack spacing={8} justifyContent="space-between" pr={3}>
+            <HStack spacing={6} justifyContent="space-between" pl={"4px"} pr={4}>
               <UserProfileMenu setIsLoggedIn={setIsLoggedIn} userName={userName} />
               <ModeSelectMenu mode={mode} setMode={setMode} />
             </HStack>
