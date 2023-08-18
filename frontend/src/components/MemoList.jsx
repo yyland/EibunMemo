@@ -16,7 +16,7 @@ export const MemoList = ({
   return (
     <List 
       styleType="none" 
-      height={"calc(100vh - 295px)"} 
+      height={"calc(100vh - 300px)"} 
       overflowY={'auto'}
     >
       {displayedMemos.map((memoObj, index) => (

@@ -24,6 +24,7 @@ const Texts = () => {
   const [endIndex, setEndIndex] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(null);
+  const [mode, setMode] = useState('text');
 
   const navigate = useNavigate();
 
@@ -105,7 +106,12 @@ const Texts = () => {
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
           userName={userName}
+          memoWords={memoWords}
           setMemoWords={setMemoWords}
+          selectedRegisteredWord={selectedRegisteredWord}
+          setSelectedRegisteredWord={setSelectedRegisteredWord}
+          mode={mode}
+          setMode={setMode}
         />
       </Box>
       <Box

@@ -18,6 +18,7 @@ export const MemoForm = ({ memo, isEditing, setMemo }) => {
             padding: '0.5rem', 
             borderRadius: '0.25rem',
             border: '2px solid #e2e8f0',
+            backgroundColor: '#fdfdff',
           }}
         />
       </FormControl>
