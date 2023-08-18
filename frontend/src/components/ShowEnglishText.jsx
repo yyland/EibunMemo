@@ -1,12 +1,8 @@
 import { Text, Box, useTheme } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { getEnglishTexts } from "../lib/api/englishText";
 import { getMemosByMemoWord } from "../lib/api/memoWord";
 
 const ShowEnglishText = ({ 
   selectedText, 
-  setSelectedText, 
-  setEnglishTexts, 
   selectedWord, 
   setSelectedRegisteredWord, 
   setSelectedWord, 
@@ -17,34 +13,8 @@ const ShowEnglishText = ({
   memoWords, 
   setDisplayedMemos
  }) => {
-  
   const theme = useTheme();
-
-  const fetch = async () => {
-    try {
-      const resTexts = await getEnglishTexts();
-      if (!resTexts || !resTexts.data) {
-        return;
-      }
-      const englishTexts = resTexts.data;
-      setEnglishTexts(englishTexts);
-
-      if (englishTexts.length > 0 && !selectedText) {
-        setSelectedText(englishTexts[0]);
-      }
-
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const chars = selectedText && selectedText.body ? selectedText.body.split('') : [];
-
   const getSelectedWord = () => {
     const selected = window.getSelection().toString().trim();
     if (selected.length > 0) {
@@ -162,18 +132,16 @@ const ShowEnglishText = ({
   };
 
   const handleWordClick = async (word) => {
-
-    setDisplayedMemos([]);
     setSelectedWord(word.word);
-
     try {
       const res = await getMemosByMemoWord(word.id);
-      setDisplayedMemos(prev => [...prev, ...res.data]);
+      setDisplayedMemos(res.data);
     } catch (err) {
       console.log(err);
     }
     setSelectedRegisteredWord(word);
   };
+
   return (
     <Text
       p={3}
@@ -183,7 +151,7 @@ const ShowEnglishText = ({
       textAlign="justify"
     >
       {chars.map((char, index) => {
-        const word = memoWords.find(w => w.startPosition <= index && w.endPosition >= index && w.englishTextId === selectedText.id);
+        const word = memoWords.find(w => w.startPosition <= index && w.endPosition >= index);
         const isSavedWord = !!word;
         return (
           <Box

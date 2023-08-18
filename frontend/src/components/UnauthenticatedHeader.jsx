@@ -1,11 +1,8 @@
-
 import { Box, Text, VStack } from "@chakra-ui/layout";
 import { SignUpButton, SignInButton } from "./MenuButton";
 import { SignUpModal } from './SignUpModal';
 import { SignInModal } from './SignInModal';
 import { useDisclosure } from "@chakra-ui/hooks";
-
-
 
 export const UnauthenticatedHeader = () => {
 
