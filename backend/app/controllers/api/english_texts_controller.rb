@@ -7,7 +7,7 @@ class Api::EnglishTextsController < ApplicationController
   end
 
   def show
-    @english_text = EnglishText.find(english_text_params[:id])
+    @english_text = EnglishText.find(params[:id])
     render json: @english_text
   end
 

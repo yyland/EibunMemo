@@ -44,7 +44,7 @@ export const UserProfileMenu = ({ setIsLoggedIn, userName }) => {
         iconSpacing="0.6em"
         color="white"
         bg="transparent"
-        _hover={{ bg: "rgba(255, 255, 255, 0.1)" }}
+        _hover={{ bg: "blue.700" }}
         _active={{ bg: "transparent" }}
       >
         <Text fontSize="md" fontWeight="normal" lineHeight="1.2em" letterSpacing="0.05em">
@@ -57,7 +57,7 @@ export const UserProfileMenu = ({ setIsLoggedIn, userName }) => {
           bg="transparent"
           py={3}
           pl={9}
-          _hover={{ bg: "rgba(255, 255, 255, 0.1)"}}
+          _hover={{ bg: "blue.700"}}
           _expanded={{ bg: "transparent" }}
           onClick={logOut}
         >
