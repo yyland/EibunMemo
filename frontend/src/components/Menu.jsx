@@ -74,13 +74,13 @@ const Menu = ({
           <Box 
             position="fixed"
             bottom="0"
-            w="full"
+            w="330px"
             bgColor="blue.800"
             py={2}
             borderTop="2px solid"
             borderColor="whiteAlpha.100"
           >
-            <HStack spacing={8}>
+            <HStack spacing={8} justifyContent="space-between" pr={3}>
               <UserProfileMenu setIsLoggedIn={setIsLoggedIn} userName={userName} />
               <ModeSelectMenu mode={mode} setMode={setMode} />
             </HStack>
