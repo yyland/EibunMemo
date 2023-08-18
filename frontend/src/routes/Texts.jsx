@@ -43,10 +43,6 @@ const Texts = () => {
     f();
   }, [navigate]);
 
-  const addMemoWord = (newMemoWord) => {
-    setMemoWords([...memoWords, newMemoWord]);
-  };
-
   return (
     <Flex minHeight="100vh" direction="row">
       <Box
@@ -66,6 +62,7 @@ const Texts = () => {
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
           userName={userName}
+          setMemoWords={setMemoWords}
         />
       </Box>
       <Box
@@ -126,7 +123,6 @@ const Texts = () => {
           startIndex={startIndex}
           endIndex={endIndex}
           selectedText={selectedText}
-          addMemoWord={addMemoWord}
           isLoggedIn={isLoggedIn}
         />
       </Box>

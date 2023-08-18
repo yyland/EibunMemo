@@ -1,8 +1,15 @@
 import { Box, List, ListItem, IconButton, Icon } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
-import { deleteEnglishText } from "../lib/api/englishText";
+import { deleteEnglishText, getMemoWordsByEnglishText } from "../lib/api/englishText";
 
-const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, englishTexts, setSelectedComponent }) => {
+const EnglishTextList = ({ 
+  setEnglishTexts, 
+  selectedText, 
+  setSelectedText, 
+  englishTexts, 
+  setSelectedComponent,
+  setMemoWords,
+}) => {
   
   const deleteText = async (id) => {
     try {
@@ -15,6 +22,18 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
       console.error(err);
     }
   }
+
+  const onListItemClick = async (text) => {
+    try {
+      const res = await getMemoWordsByEnglishText(text.id);
+      const memoWords = res.data;
+      setMemoWords(memoWords);
+    } catch (err) {
+      console.error(err);
+    }
+    setSelectedText(text);
+    setSelectedComponent('ShowEnglishText');
+  };
 
   return (
     <Box 
@@ -43,10 +62,7 @@ const EnglishTextList = ({ setEnglishTexts, selectedText, setSelectedText, engli
             key={text.id} 
             color="white"
             width="100%"
-            onClick={() => {
-              setSelectedText(text);
-              setSelectedComponent('ShowEnglishText');
-            }}
+            onClick={() => onListItemClick(text)}
             bg={text.id === selectedText?.id ? 'blue.700' : 'blue.800'}
             _hover={{ bg: 'blue.700' }}
             my={0}

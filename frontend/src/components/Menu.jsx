@@ -12,7 +12,8 @@ const Menu = ({
   englishTexts, 
   isLoggedIn, 
   setIsLoggedIn, 
-  userName 
+  userName,
+  setMemoWords,
 }) => {
 
   return (
@@ -43,6 +44,7 @@ const Menu = ({
               setSelectedText={setSelectedText} 
               englishTexts={englishTexts} 
               setSelectedComponent={setSelectedComponent}
+              setMemoWords={setMemoWords}
             />
           </Box>
           <Box 

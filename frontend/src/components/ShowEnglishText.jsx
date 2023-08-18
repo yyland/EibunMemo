@@ -1,9 +1,22 @@
 import { Text, Box, useTheme } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { getEnglishTexts } from "../lib/api/englishText";
-import { getMemoWords, getMemosByMemoWord } from "../lib/api/memoWord";
+import { getMemosByMemoWord } from "../lib/api/memoWord";
 
-const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selectedWord, setMemoWords, setSelectedRegisteredWord, setSelectedWord, startIndex, setStartIndex, endIndex, setEndIndex, memoWords, setDisplayedMemos }) => {
+const ShowEnglishText = ({ 
+  selectedText, 
+  setSelectedText, 
+  setEnglishTexts, 
+  selectedWord, 
+  setSelectedRegisteredWord, 
+  setSelectedWord, 
+  startIndex, 
+  setStartIndex, 
+  endIndex, 
+  setEndIndex, 
+  memoWords, 
+  setDisplayedMemos
+ }) => {
   
   const theme = useTheme();
 
@@ -19,10 +32,6 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
       if (englishTexts.length > 0 && !selectedText) {
         setSelectedText(englishTexts[0]);
       }
-
-      const resWords = await getMemoWords();
-      const savedWords = resWords.data;
-      setMemoWords(savedWords);
 
     } catch (err) {
       console.error(err);
@@ -165,7 +174,6 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
     }
     setSelectedRegisteredWord(word);
   };
-
   return (
     <Text
       p={3}
@@ -190,11 +198,10 @@ const ShowEnglishText = ({ selectedText, setSelectedText, setEnglishTexts, selec
               backgroundColor: (startIndex !== null && endIndex !== null && index >= startIndex && index <= endIndex && !isSavedWord) 
                                 ? theme.colors.blue[100] 
                                 : '',
-              cursor: isSavedWord ? 'pointer' : 'default'
+              cursor: isSavedWord ? 'pointer' : 'default',
+              paddingBottom: "1px",
+              borderBottom: isSavedWord ? `2px solid ${theme.colors.gray[400]}` : "none",
             }}
-            borderBottom={isSavedWord ? "2px solid gray" : "none"}
-            // bg={isSavedWord ? "gray.200" : "transparent"}
-            paddingBottom="1px"
           >
             {char}
           </Box>

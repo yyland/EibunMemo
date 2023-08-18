@@ -66,3 +66,20 @@ export const deleteEnglishText = (id) => {
     },
   });
 };
+
+export const getMemoWordsByEnglishText = (id) => {
+  if (
+    !Cookies.get('_access_token') ||
+    !Cookies.get('_client') ||
+    !Cookies.get('_uid')
+  )
+    return;
+
+  return client.get(`api/english_texts/${id}/memo_words`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
