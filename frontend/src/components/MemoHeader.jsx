@@ -5,7 +5,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 export const MemoHeader = ({ 
   selectedWord, 
   selectedRegisteredWord, 
-  handleDeleteSelectedWord 
+  handleDeleteWord 
 }) => {
   
   return (
@@ -43,7 +43,7 @@ export const MemoHeader = ({
             <MenuItem 
               onClick={(e) => {
                 e.stopPropagation();
-                handleDeleteSelectedWord(selectedRegisteredWord.id);
+                handleDeleteWord(selectedRegisteredWord.id);
               }}
             >
               削除する
