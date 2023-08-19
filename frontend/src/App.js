@@ -6,6 +6,8 @@ import ShowEnglishText from './components/ShowEnglishText';
 import { Box, Flex } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { getUser } from './lib/api/auth.js';
+import { createGuestUser } from './lib/api/auth.js';
+import Cookies from 'js-cookie';
 
 const App = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -18,30 +20,61 @@ const App = () => {
   const [startIndex, setStartIndex] = useState(null);
   const [endIndex, setEndIndex] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
 
   const navigate = useNavigate();
-
   useEffect(() => {
-    const f = async () => {
+    const fetchUser = async () => {
       try {
-        const res = await getUser();
-        if (res && res.data.isLogin) {
-          setIsLoggedIn(true);
-          navigate('/texts');
-        } else {
+        const userResponse = await getUser();
+        console.log('here1');
+        if (!userResponse || !userResponse.data.isLogin) {
           setIsLoggedIn(false);
-          navigate('/');
+          setIsGuest(false);
+          return false;
+        }
+        if (userResponse.data.isGuest) {
+          setIsLoggedIn(true);
+          setIsGuest(true);
+          return true;
+        } else {
+          setIsLoggedIn(true);
+          setIsGuest(false);
+          return true;
+        }
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    };
+
+    const guestLogin = async () => {
+      try {
+        const guestResponse = await createGuestUser();
+        if (guestResponse && guestResponse.data.status === 'created') {
+          Cookies.set('guest_uuid', guestResponse.data.user.guestUuid);
+          Cookies.set('_access_token', guestResponse.headers['access-token']);
+          Cookies.set('_client', guestResponse.headers['client']);
+          Cookies.set('_uid', guestResponse.headers['uid']);
+          setIsLoggedIn(true);
+          setIsGuest(true);
+          navigate('/texts');
         }
       } catch (e) {
         console.log(e);
       }
     };
-    f();
-  }, [navigate]);
 
-  const addMemoWord = (newMemoWord) => {
-    setMemoWords([...memoWords, newMemoWord]);
-  };
+    fetchUser().then((isLoggedIn) => {
+      if (!isLoggedIn) {
+        guestLogin();
+      } else {
+        navigate('/texts');
+      }
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Flex minHeight="100vh" direction="row">
@@ -53,6 +86,7 @@ const App = () => {
           setSelectedText={setSelectedText}
           englishTexts={englishTexts}
           isLoggedIn={isLoggedIn}
+          setSelectedRegisteredWord={setSelectedRegisteredWord}
         />
       </Box>
       <Box
@@ -112,7 +146,6 @@ const App = () => {
           startIndex={startIndex}
           endIndex={endIndex}
           selectedText={selectedText}
-          addMemoWord={addMemoWord}
         />
       </Box>
     </Flex>

@@ -3,10 +3,18 @@ Rails.application.routes.draw do
     registrations: 'auth/registrations'
   }
 
-  namespace :auth do
-    resources :sessions, only: %i[index]
+  devise_scope :user do
+    namespace :auth do
+      resources :sessions, only: %i[index]
+    end
   end
 
+  devise_scope :user do
+    namespace :users do
+      post 'create_guest', to: 'sessions#create_guest'
+    end
+  end
+  
   namespace :api do
 
     get "health_check", to: "health_checks#index"

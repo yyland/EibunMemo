@@ -37,3 +37,7 @@ export const getUser = () => {
   });
   return res;
 };
+
+export const createGuestUser = () => {
+  return client.post('users/create_guest');
+};
