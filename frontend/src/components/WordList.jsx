@@ -2,6 +2,7 @@ import { Box, List, ListItem, Icon } from "@chakra-ui/react";
 import { getMemoWordsByEnglishText, getEnglishText } from "../lib/api/englishText";
 import { getMemoWords } from "../lib/api/memoWord";
 import { useEffect, useState } from "react";
+import { getMemosByMemoWord } from "../lib/api/memoWord";
 
 const WordList = ({
   setSelectedText, 
@@ -9,6 +10,8 @@ const WordList = ({
   selectedRegisteredWord,
   setSelectedRegisteredWord,
   setMemoWords,
+  setDisplayedMemos,
+  setSelectedWord,
 }) => {
 
   const [allMemoWords, setAllMemoWords] = useState([]);
@@ -20,6 +23,13 @@ const WordList = ({
         const words = res.data;
         setAllMemoWords(words);
         setSelectedRegisteredWord(words[0]);
+        const resMemos = await getMemosByMemoWord(words[0].id);
+        setDisplayedMemos(resMemos.data);
+        setSelectedWord(null);
+        const resText = await getEnglishText(words[0].englishTextId);
+        setSelectedText(resText.data);
+        const resWords = await getMemoWordsByEnglishText(words[0].englishTextId);
+        setMemoWords(resWords.data);
         setSelectedComponent('ShowEnglishText');
       } catch (err) {
         console.error(err);
@@ -33,11 +43,14 @@ const WordList = ({
     try {
       const resWords = await getMemoWordsByEnglishText(word.englishTextId);
       const resText = await getEnglishText(word.englishTextId);
+      const resMemos = await getMemosByMemoWord(word.id);
       const words = resWords.data;
       const text = resText.data;
+      const memos = resMemos.data;
       setMemoWords(words);
       setSelectedText(text);
       setSelectedRegisteredWord(word);
+      setDisplayedMemos(memos);
     } catch (err) {
       console.error(err);
     }

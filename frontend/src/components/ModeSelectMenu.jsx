@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, HStack } from "@chakra-ui/react";
 
-export const ModeSelectMenu = ({ mode, setMode }) => {
+export const ModeSelectMenu = ({ mode, setMode, setSelectedWord }) => {
 
   const buttonStyle = {
     bgColor: "blue.800",
@@ -21,14 +21,20 @@ export const ModeSelectMenu = ({ mode, setMode }) => {
       <Button
         {...buttonStyle}
         bg={mode === "text" ? "blue.700" : "blue.800"}
-        onClick={() => setMode("text")}
+        onClick={() => {
+          setSelectedWord(null);
+          setMode("text");
+        }}
       >
         Text
       </Button>
       <Button
         {...buttonStyle}
         bg={mode === "word" ? "blue.700" : "blue.800"}
-        onClick={() => setMode("word")}
+        onClick={() => {
+          setSelectedWord(null);
+          setMode("word");
+        }}
       >
         Word
       </Button>

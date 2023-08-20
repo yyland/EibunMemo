@@ -10,6 +10,7 @@ const EnglishTextList = ({
   setSelectedComponent,
   setMemoWords,
   isGuest,
+  setSelectedWord,
 }) => {
   
   const deleteText = async (id) => {
@@ -29,6 +30,7 @@ const EnglishTextList = ({
       const res = await getMemoWordsByEnglishText(text.id);
       const memoWords = res.data;
       setMemoWords(memoWords);
+      setSelectedWord(null);
     } catch (err) {
       console.error(err);
     }

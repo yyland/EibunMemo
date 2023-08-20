@@ -21,6 +21,8 @@ const Menu = ({
   mode,
   setMode,
   isGuest,
+  setDisplayedMemos,
+  setSelectedWord,
 }) => {
 
   return (
@@ -56,6 +58,7 @@ const Menu = ({
                   setSelectedComponent={setSelectedComponent}
                   setMemoWords={setMemoWords}
                   isGuest={isGuest}
+                  setSelectedWord={setSelectedWord}
                 />
               </Box>
             </>
@@ -69,6 +72,8 @@ const Menu = ({
                   selectedRegisteredWord={selectedRegisteredWord}
                   setSelectedRegisteredWord={setSelectedRegisteredWord}
                   setMemoWords={setMemoWords}
+                  setDisplayedMemos={setDisplayedMemos}
+                  setSelectedWord={setSelectedText}
                 />
               </Box>
             </>
@@ -85,7 +90,7 @@ const Menu = ({
           >
             <HStack spacing={6} justifyContent="space-between" pl={"4px"} pr={4}>
               <UserProfileMenu setIsLoggedIn={setIsLoggedIn} userName={userName} isGuest={isGuest} />
-              <ModeSelectMenu mode={mode} setMode={setMode} />
+              <ModeSelectMenu mode={mode} setMode={setMode} setSelectedWord={setSelectedWord} />
             </HStack>
           </Box>
 

@@ -143,7 +143,9 @@ const Texts = () => {
           mode={mode}
           setMode={setMode}
           isGuest={isGuest}
-        />
+          setDisplayedMemos={setDisplayedMemos}
+          setSelectedWord={setSelectedWord}
+          />
       </Box>
       <Box
         flex="2"
@@ -161,7 +163,6 @@ const Texts = () => {
             <ShowEnglishText
               selectedText={selectedText}
               selectedWord={selectedWord}
-              setMemoWords={setMemoWords}
               setSelectedWord={setSelectedWord}
               setSelectedRegisteredWord={setSelectedRegisteredWord}
               startIndex={startIndex}
@@ -170,12 +171,18 @@ const Texts = () => {
               setEndIndex={setEndIndex}
               memoWords={memoWords}
               setDisplayedMemos={setDisplayedMemos}
+              mode={mode}
+              selectedRegisteredWord={selectedRegisteredWord}
             />
           ) : (
             <RegisterEnglishText
+              setMemoWords={setMemoWords}
               setEnglishTexts={setEnglishTexts}
               setSelectedText={setSelectedText}
               setSelectedComponent={setSelectedComponent}
+              setSelectedWord={setSelectedWord}
+              setSelectedRegisteredWord={setSelectedRegisteredWord}
+              setDisplayedMemos={setDisplayedMemos}
             />
           )
         ) : <Box></Box>}
