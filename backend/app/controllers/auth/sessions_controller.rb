@@ -36,7 +36,7 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
       create_sample_data_for_guest(guest_user)
     end
 
-    cookies[:guest_uuid] = guest_uuid
+    cookies[:guest_uuid] = { value: guest_uuid, http_only: true, secure: Rails.env.production? }
     sign_in guest_user
 
     @resource = guest_user

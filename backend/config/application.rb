@@ -39,6 +39,6 @@ module Backend
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
     config.middleware.use ActionDispatch::Session::CookieStore
-
+    config.action_dispatch.cookies_same_site_protection = :none
   end
 end
