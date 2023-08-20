@@ -5,7 +5,6 @@ import RegisterEnglishText from './components/RegisterEnglishText';
 import ShowEnglishText from './components/ShowEnglishText';
 import { Box, Flex } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { getUser } from './lib/api/auth.js';
 
 const App = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -17,31 +16,14 @@ const App = () => {
   const [selectedRegisteredWord, setSelectedRegisteredWord] = useState(null);
   const [startIndex, setStartIndex] = useState(null);
   const [endIndex, setEndIndex] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const isLoggedIn = false;
   const navigate = useNavigate();
 
+  // TODO: App.jsが/textsに遷移するためだけの存在になっていることの解消
   useEffect(() => {
-    const f = async () => {
-      try {
-        const res = await getUser();
-        if (res && res.data.isLogin) {
-          setIsLoggedIn(true);
-          navigate('/texts');
-        } else {
-          setIsLoggedIn(false);
-          navigate('/');
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    f();
+    navigate('/texts');
   }, [navigate]);
-
-  const addMemoWord = (newMemoWord) => {
-    setMemoWords([...memoWords, newMemoWord]);
-  };
 
   return (
     <Flex minHeight="100vh" direction="row">
@@ -53,6 +35,7 @@ const App = () => {
           setSelectedText={setSelectedText}
           englishTexts={englishTexts}
           isLoggedIn={isLoggedIn}
+          setSelectedRegisteredWord={setSelectedRegisteredWord}
         />
       </Box>
       <Box
@@ -112,7 +95,6 @@ const App = () => {
           startIndex={startIndex}
           endIndex={endIndex}
           selectedText={selectedText}
-          addMemoWord={addMemoWord}
         />
       </Box>
     </Flex>

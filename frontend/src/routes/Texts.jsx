@@ -7,10 +7,11 @@ import {
   Box,
   Flex,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 import { getUser } from '../lib/api/auth.js';
 import { getEnglishTexts } from '../lib/api/englishText.js';
 import { getMemoWordsByEnglishText } from '../lib/api/englishText';
+import { createGuestUser } from '../lib/api/auth';
+import Cookies from 'js-cookie';
 
 const Texts = () => {
   const [memoWords, setMemoWords] = useState([]);
@@ -25,19 +26,45 @@ const Texts = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(null);
   const [mode, setMode] = useState('text');
-
-  const navigate = useNavigate();
+  const [isGuest, setIsGuest] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await getUser();
-        if (res && res.data.isLogin) {
-          setUserName(res.data.data.username);
-          setIsLoggedIn(true);
-        } else {
+        const userRes = await getUser();
+        if (!userRes || !userRes.data.isLogin) {
           setIsLoggedIn(false);
-          navigate('/');
+          setIsGuest(false);
+          return false;
+        }
+        if (userRes.data.isGuest) {
+          setUserName(userRes.data.data.username);
+          setIsLoggedIn(true);
+          setIsGuest(true);
+          return true;
+        } else {
+          setUserName(userRes.data.data.username);
+          setIsLoggedIn(true);
+          setIsGuest(false);
+          return true;
+        }
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    };
+
+    const guestLogin = async () => {
+      try {
+        const guestRes = await createGuestUser();
+        if (guestRes && guestRes.data.status === 'created') {
+          Cookies.set('guest_uuid', guestRes.data.user.guestUuid);
+          Cookies.set('_access_token', guestRes.headers['access-token']);
+          Cookies.set('_client', guestRes.headers['client']);
+          Cookies.set('_uid', guestRes.headers['uid']);
+          setUserName(guestRes.data.user.username);
+          setIsLoggedIn(true);
+          setIsGuest(true);
         }
       } catch (e) {
         console.log(e);
@@ -78,7 +105,10 @@ const Texts = () => {
     };
 
     const fetchData = async () => {
-      await fetchUser();
+      const isSignIn = await fetchUser();
+      if (!isSignIn) {
+        await guestLogin();
+      }
       const firstText = await fetchEnglishTexts();
       await fetchMemoWords(firstText);
     };
@@ -112,6 +142,7 @@ const Texts = () => {
           setSelectedRegisteredWord={setSelectedRegisteredWord}
           mode={mode}
           setMode={setMode}
+          isGuest={isGuest}
         />
       </Box>
       <Box

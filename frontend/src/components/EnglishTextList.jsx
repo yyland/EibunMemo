@@ -9,6 +9,7 @@ const EnglishTextList = ({
   englishTexts, 
   setSelectedComponent,
   setMemoWords,
+  isGuest,
 }) => {
   
   const deleteText = async (id) => {
@@ -39,7 +40,7 @@ const EnglishTextList = ({
     <Box 
       display="flex" 
       justifyContent="space-between" 
-      height="calc(100vh - 135px)"
+      height={`calc(100vh - ${isGuest ? '255px' : '135px'})`}
     >
       <List 
         width="100%" 

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
 import {
   Modal,
   ModalOverlay,
@@ -16,25 +15,27 @@ import { signIn } from "../lib/api/auth.js";
 import Cookies from "js-cookie";
 
 export const SignInModal = ({isOpen, onClose}) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState(""); 
-  const navigate = useNavigate();
+  const [inputUsername, setInputUsername] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
 
   const register = async () => {
     try {
-      const res = await signIn({ username, password });
+      const res = await signIn({ 
+        username: inputUsername,
+        password: inputPassword,
+      });
       Cookies.set("_access_token", res.headers["access-token"]);
       Cookies.set("_client", res.headers["client"]);
       Cookies.set("_uid", res.headers["uid"]);
-      navigate("/texts");
+      window.location.reload();
     } catch (e) {
       console.log(e);
     }
   };
 
   const clearInput = () => {
-    setUsername("");
-    setPassword("");
+    setInputUsername("");
+    setInputPassword("");
   };
 
   return (
@@ -47,14 +48,14 @@ export const SignInModal = ({isOpen, onClose}) => {
           <Heading as="h3" size="md" mb="16px">ログイン</Heading>
           <Input
             placeholder="ユーザー名"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            value={inputUsername}
+            onChange={(event) => setInputUsername(event.target.value)}
             mb="16px"
           />
           <Input
             placeholder="パスワード"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            value={inputPassword}
+            onChange={(event) => setInputPassword(event.target.value)}
             mb="16px"
           />
         </ModalBody>
@@ -62,7 +63,7 @@ export const SignInModal = ({isOpen, onClose}) => {
           <Button
             colorScheme="blue"
             onClick={() => {
-              register({ username, password });
+              register({ inputUsername, inputPassword });
               clearInput();
               onClose();
             }}

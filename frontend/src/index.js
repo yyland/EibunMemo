@@ -10,16 +10,14 @@ import Texts from './routes/Texts';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<App />} />
-          <Route path="texts" element={<Texts />} />
-        </Routes>
-      </BrowserRouter>
-    </ChakraProvider>
-  </React.StrictMode>
+  <ChakraProvider theme={theme}>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<App />} />
+        <Route path="texts" element={<Texts />} />
+      </Routes>
+    </BrowserRouter>
+  </ChakraProvider>
 );
 
 reportWebVitals();
