@@ -52,13 +52,13 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
   private
 
   def transfer_guest_data_to_user(guest_uuid, user)
-    guest = User.find_by(guest_uuid: guest_uuid)
+    guest = User.find_by(guest_uuid:)
     return unless guest
 
     # TODO: 初期データは引き継がないようにする
     User.transaction do
       guest.english_texts.each do |text|
-        updated_text = text.update!(user_id: user.id)
+        text.update!(user_id: user.id)
       end
     end
     guest.reload
@@ -104,10 +104,9 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
     Rails.logger.error "#{message}: #{error_messages}"
   end
 
-
   protected
 
   def configure_sign_in_params
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:username, :password, session: [:username, :password]])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:username, :password, { session: [:username, :password] }])
   end
 end

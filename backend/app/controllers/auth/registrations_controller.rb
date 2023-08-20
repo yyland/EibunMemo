@@ -14,13 +14,13 @@ class Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
   private
 
   def transfer_guest_data_to_user(guest_uuid, user)
-    guest = User.find_by(guest_uuid: guest_uuid)
+    guest = User.find_by(guest_uuid:)
     return unless guest
 
     # TODO: 初期データは引き継がないようにする
     User.transaction do
       guest.english_texts.each do |text|
-        updated_text = text.update!(user_id: user.id)
+        text.update!(user_id: user.id)
       end
     end
     guest.reload
