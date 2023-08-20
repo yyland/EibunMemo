@@ -17,10 +17,11 @@ class Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
     guest = User.find_by(guest_uuid:)
     return unless guest
 
-    # TODO: 初期データは引き継がないようにする
     User.transaction do
       guest.english_texts.each do |text|
-        text.update!(user_id: user.id)
+        if !text.is_initial_data
+          text.update!(user_id: user.id)
+        end
       end
     end
     guest.reload
