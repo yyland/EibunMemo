@@ -3,7 +3,7 @@ import { Button, FormControl, FormLabel, VStack, HStack } from "@chakra-ui/react
 import TextareaAutosize from 'react-textarea-autosize';
 import { registerEnglishText } from '../lib/api/englishText';
 
-const RegisterEnglishText = ({ setEnglishTexts, setSelectedText, setSelectedComponent }) => {
+const RegisterEnglishText = ({setMemoWords, setEnglishTexts, setSelectedText, setSelectedComponent, setSelectedWord, setSelectedRegisteredWord, setDisplayedMemos }) => {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
 
@@ -18,7 +18,6 @@ const RegisterEnglishText = ({ setEnglishTexts, setSelectedText, setSelectedComp
       const newText = res.data;
       setEnglishTexts((prevTexts) => [...prevTexts, newText]);
       setSelectedText(newText);
-      setSelectedComponent('ShowEnglishText');
       return res.data;
     } catch (err) {
       console.error(err);
@@ -31,8 +30,12 @@ const RegisterEnglishText = ({ setEnglishTexts, setSelectedText, setSelectedComp
       return;
     }
     try {
-      const res = await registerText(title, text);
-      setSelectedText(res);
+      await registerText(title, text);
+      setSelectedWord(null);
+      setSelectedRegisteredWord(null);
+      setDisplayedMemos([]);
+      setMemoWords([]);
+      setSelectedComponent('ShowEnglishText');
     }
     catch (err) {
       console.error(err);

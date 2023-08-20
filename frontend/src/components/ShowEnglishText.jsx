@@ -11,8 +11,11 @@ const ShowEnglishText = ({
   endIndex, 
   setEndIndex, 
   memoWords, 
-  setDisplayedMemos
+  setDisplayedMemos,
+  mode,
+  selectedRegisteredWord,
  }) => {
+
   const theme = useTheme();
   const chars = selectedText && selectedText.body ? selectedText.body.split('') : [];
   const getSelectedWord = () => {
@@ -153,6 +156,27 @@ const ShowEnglishText = ({
       {chars.map((char, index) => {
         const word = memoWords.find(w => w.startPosition <= index && w.endPosition >= index);
         const isSavedWord = !!word;
+
+        console.log('selectedWord', selectedWord);
+        let defaultStyling = {
+          backgroundColor: (selectedWord !== null && startIndex !== null && endIndex !== null && index >= startIndex && index <= endIndex && !isSavedWord)
+                          ? theme.colors.blue[100]
+                          : '',
+          cursor: isSavedWord ? 'pointer' : 'default',
+          paddingBottom: "1px",
+          borderBottom: isSavedWord ? `2px solid ${theme.colors.gray[400]}` : "none",
+        };
+  
+        // 'word' モードで、選択したワードの背景色を変更
+        const isWordMode = mode === 'word';
+        const isIndexWithinSelectedWord = selectedRegisteredWord !== null 
+          && selectedRegisteredWord.startPosition <= index 
+          && selectedRegisteredWord.endPosition >= index;
+        
+        if (isWordMode && isIndexWithinSelectedWord) {
+          defaultStyling.backgroundColor = theme.colors.yellow[100];
+        }
+
         return (
           <Box
             as="span"
@@ -162,14 +186,7 @@ const ShowEnglishText = ({
             onMouseDown={() => handleMouseDown(index)}
             onMouseUp={() => handleMouseUp(index)}
             onClick={isSavedWord ? () => handleWordClick(word) : null}
-            style={{
-              backgroundColor: (startIndex !== null && endIndex !== null && index >= startIndex && index <= endIndex && !isSavedWord) 
-                                ? theme.colors.blue[100] 
-                                : '',
-              cursor: isSavedWord ? 'pointer' : 'default',
-              paddingBottom: "1px",
-              borderBottom: isSavedWord ? `2px solid ${theme.colors.gray[400]}` : "none",
-            }}
+            style={defaultStyling}
           >
             {char}
           </Box>
