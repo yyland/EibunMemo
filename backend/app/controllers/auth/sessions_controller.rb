@@ -57,9 +57,7 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
 
     User.transaction do
       guest.english_texts.each do |text|
-        if !text.is_initial_data
-          text.update!(user_id: user.id)
-        end
+        text.update!(user_id: user.id) unless text.is_initial_data
       end
     end
     guest.reload
