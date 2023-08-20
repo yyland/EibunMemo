@@ -1,4 +1,4 @@
-import { Box, Text, VStack } from "@chakra-ui/layout";
+import { Box, VStack } from "@chakra-ui/layout";
 import { SignUpButton, SignInButton } from "./MenuButton";
 import { SignUpModal } from './SignUpModal';
 import { SignInModal } from './SignInModal';
@@ -27,15 +27,6 @@ export const UnauthenticatedHeader = () => {
       </VStack>
       <SignUpModal isOpen={isSignUpModalOpen} onClose={onSignUpModalClose} />
       <SignInModal isOpen={isSignInModalOpen} onClose={onSignInModalClose} />
-
-      <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
-
-      <Text fontSize="sm" color="whiteAlpha.900" textAlign="left" mt={2} ml={4}>
-        <br />
-        サンプルの英文が登録されています。<br /><br />
-        ユーザー名 : guest<br />
-        パスワード : password<br /><br />
-      </Text>  
     </>
   )
 }

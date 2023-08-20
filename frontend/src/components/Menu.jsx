@@ -20,6 +20,7 @@ const Menu = ({
   setSelectedRegisteredWord,
   mode,
   setMode,
+  isGuest,
 }) => {
 
   return (
@@ -33,7 +34,7 @@ const Menu = ({
       overflow="hidden"
     >
 
-      {!isLoggedIn && (
+      {(!isLoggedIn || isGuest) && (
         <UnauthenticatedHeader />
       )}
 
@@ -41,7 +42,8 @@ const Menu = ({
         <>
           {mode === "text" ? (
             <>
-              <Box w="full" marginLeft={"0.05em"} marginTop={"2.5"}>
+              <Box w="full" marginLeft={"0.05em"} marginTop={"0"}>
+                <Box height="2px" bgColor="whiteAlpha.100" w="full" marginBottom={2}></Box>
                 <NewTextButton setSelectedComponent={setSelectedComponent} />
               </Box>
               <Box height="2px" bgColor="whiteAlpha.100" w="full"></Box>
@@ -53,6 +55,7 @@ const Menu = ({
                   englishTexts={englishTexts} 
                   setSelectedComponent={setSelectedComponent}
                   setMemoWords={setMemoWords}
+                  isGuest={isGuest}
                 />
               </Box>
             </>
@@ -81,7 +84,7 @@ const Menu = ({
             borderColor="whiteAlpha.100"
           >
             <HStack spacing={6} justifyContent="space-between" pl={"4px"} pr={4}>
-              <UserProfileMenu setIsLoggedIn={setIsLoggedIn} userName={userName} />
+              <UserProfileMenu setIsLoggedIn={setIsLoggedIn} userName={userName} isGuest={isGuest} />
               <ModeSelectMenu mode={mode} setMode={setMode} />
             </HStack>
           </Box>

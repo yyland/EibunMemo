@@ -8,6 +8,7 @@ const options = {
 const client = applyCaseMiddleware(
   axios.create({
     baseURL: process.env.REACT_APP_URL,
+    withCredentials: true,
   }),
   options
 );

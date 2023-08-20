@@ -1,20 +1,17 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-    registrations: 'auth/registrations'
+    registrations: 'auth/registrations',
+    sessions: 'auth/sessions'
   }
-
+  
   devise_scope :user do
     namespace :auth do
+      post 'sign_in', to: 'sessions#create'
+      post 'create_guest', to: 'sessions#create_guest'
       resources :sessions, only: %i[index]
     end
   end
 
-  devise_scope :user do
-    namespace :users do
-      post 'create_guest', to: 'sessions#create_guest'
-    end
-  end
-  
   namespace :api do
 
     get "health_check", to: "health_checks#index"

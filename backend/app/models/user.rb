@@ -10,8 +10,10 @@ class User < ApplicationRecord
   has_many :english_texts, dependent: :destroy
 
   def email=(_value)
-    self[:email] = "#{self[:username]}@eibunmemo.com"
+    unique_token = SecureRandom.hex(8)
+    self[:email] = "#{self[:username]}_#{unique_token}@eibunmemo.com"
   end
 
   validates :username, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true
 end

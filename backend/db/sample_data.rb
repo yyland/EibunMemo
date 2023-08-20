@@ -2,7 +2,7 @@
 module SampleData
   ENGLISH_TEXTS = [
     {
-      title: 'THE GOLDEN BIRD',
+      title: 'サンプルテキスト',
       body: <<-TEXT
 THE BROTHERS GRIMM FAIRY TALES
 
