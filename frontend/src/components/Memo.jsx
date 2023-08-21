@@ -16,7 +16,8 @@ const Memo = ({
   startIndex, 
   endIndex, 
   selectedText,
-  isLoggedIn 
+  isLoggedIn,
+  setAllMemoWords,
 }) => {
 
   const {
@@ -42,6 +43,7 @@ const Memo = ({
       setDisplayedMemos,
       setSelectedRegisteredWord,
       setMemoWords,
+      setAllMemoWords,
     });
   };
 
@@ -67,7 +69,8 @@ const Memo = ({
               setSelectedRegisteredWord,
               setSelectedWord,
               setDisplayedMemos,
-              setMemoWords
+              setMemoWords,
+              setAllMemoWords,
             )}
           ></MemoHeader>
         </Box>

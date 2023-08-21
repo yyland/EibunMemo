@@ -10,6 +10,7 @@ import {
 import { getUser } from '../lib/api/auth.js';
 import { getEnglishTexts } from '../lib/api/englishText.js';
 import { getMemoWordsByEnglishText } from '../lib/api/englishText';
+import { getMemoWords } from '../lib/api/memoWord';
 import { createGuestUser } from '../lib/api/auth';
 import Cookies from 'js-cookie';
 
@@ -27,6 +28,7 @@ const Texts = () => {
   const [userName, setUserName] = useState(null);
   const [mode, setMode] = useState('text');
   const [isGuest, setIsGuest] = useState(false);
+  const [allMemoWords, setAllMemoWords] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -90,7 +92,7 @@ const Texts = () => {
       }
     };
 
-    const fetchMemoWords = async (text) => {
+    const fetchMemoWordsByText = async (text) => {
       try {
         if (!text) return;
         const resWords = await getMemoWordsByEnglishText(text.id);
@@ -104,15 +106,28 @@ const Texts = () => {
       }
     };
 
+    const fetchAllMemoWords = async () => {
+      try {
+        const resAllWords = await getMemoWords();
+        if (!resAllWords || !resAllWords.data) {
+          return;
+        }
+        const allWords = resAllWords.data;
+        setAllMemoWords(allWords);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     const fetchData = async () => {
       const isSignIn = await fetchUser();
       if (!isSignIn) {
         await guestLogin();
       }
       const firstText = await fetchEnglishTexts();
-      await fetchMemoWords(firstText);
+      await fetchMemoWordsByText(firstText);
+      await fetchAllMemoWords();
     };
-
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -145,6 +160,7 @@ const Texts = () => {
           isGuest={isGuest}
           setDisplayedMemos={setDisplayedMemos}
           setSelectedWord={setSelectedWord}
+          allMemoWords={allMemoWords}
           />
       </Box>
       <Box
@@ -208,6 +224,7 @@ const Texts = () => {
           endIndex={endIndex}
           selectedText={selectedText}
           isLoggedIn={isLoggedIn}
+          setAllMemoWords={setAllMemoWords}
         />
       </Box>
     </Flex>
