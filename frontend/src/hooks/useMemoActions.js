@@ -20,6 +20,7 @@ export const useMemoActions = () => {
     setDisplayedMemos,
     setSelectedRegisteredWord,
     setMemoWords,
+    setAllMemoWords,
   }) => {
     if (isEditing) {
       await saveEditedMemo(selectedRegisteredWord, setDisplayedMemos);
@@ -39,6 +40,8 @@ export const useMemoActions = () => {
       );
       if (newWord) {
         await registerNewMemo(newWord, setDisplayedMemos);
+        setAllMemoWords((prevWords) => [...prevWords, newWord]);
+        setSelectedRegisteredWord(newWord);
       }
     }
   };
@@ -107,7 +110,8 @@ export const useMemoActions = () => {
     setSelectedRegisteredWord,
     setSelectedWord,
     setDisplayedMemos,
-    setMemoWords
+    setMemoWords,
+    setAllMemoWords
   ) => {
     try {
       await deleteMemoWord(wordId);
@@ -115,6 +119,9 @@ export const useMemoActions = () => {
       setSelectedWord('');
       setDisplayedMemos([]);
       setMemoWords((prevWords) =>
+        prevWords.filter((word) => word.id !== wordId)
+      );
+      setAllMemoWords((prevWords) =>
         prevWords.filter((word) => word.id !== wordId)
       );
     } catch (err) {

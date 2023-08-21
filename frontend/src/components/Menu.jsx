@@ -23,6 +23,7 @@ const Menu = ({
   isGuest,
   setDisplayedMemos,
   setSelectedWord,
+  allMemoWords,
 }) => {
 
   return (
@@ -74,6 +75,7 @@ const Menu = ({
                   setMemoWords={setMemoWords}
                   setDisplayedMemos={setDisplayedMemos}
                   setSelectedWord={setSelectedText}
+                  allMemoWords={allMemoWords}
                 />
               </Box>
             </>

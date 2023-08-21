@@ -157,7 +157,6 @@ const ShowEnglishText = ({
         const word = memoWords.find(w => w.startPosition <= index && w.endPosition >= index);
         const isSavedWord = !!word;
 
-        console.log('selectedWord', selectedWord);
         let defaultStyling = {
           backgroundColor: (selectedWord !== null && startIndex !== null && endIndex !== null && index >= startIndex && index <= endIndex && !isSavedWord)
                           ? theme.colors.blue[100]
