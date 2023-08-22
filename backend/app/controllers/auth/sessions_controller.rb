@@ -65,10 +65,11 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
   end
 
   def create_sample_data_for_guest(user)
-    SampleData::ENGLISH_TEXTS.each do |data|
-      text = user.english_texts.find_or_initialize_by(title: data[:title])
-      text.body = data[:body]
+    SampleData::ENGLISH_TEXTS.each do |text_data|
+      text = user.english_texts.find_or_initialize_by(title: text_data[:title])
+      text.body = text_data[:body]
       text.is_initial_data = true
+
       if text.save
         create_memo_words_for_text(text)
       else
@@ -78,22 +79,26 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
   end
 
   def create_memo_words_for_text(text)
-    SampleData::MEMO_WORDS.each do |memo_word_data|
+    filtered_memo_words = SampleData::MEMO_WORDS.select { |word| word[:text_title] == text.title }
+
+    filtered_memo_words.each do |word|
       memo_word = text.memo_words.find_or_initialize_by(
-        word: memo_word_data[:word],
-        start_position: memo_word_data[:start_position],
-        end_position: memo_word_data[:end_position]
+        word: word[:word],
+        start_position: word[:start_position],
+        end_position: word[:end_position]
       )
       if memo_word.save
-        create_memos_for_memo_word(memo_word)
+        create_memos_for_memo_word(memo_word, text.title)
       else
         log_error('Error saving MemoWord', memo_word.errors.full_messages)
       end
     end
   end
 
-  def create_memos_for_memo_word(memo_word)
-    SampleData::MEMOS.each do |memo_data|
+  def create_memos_for_memo_word(memo_word, text_title)
+    filtered_memos = SampleData::MEMOS.select { |memo| memo[:text_title] == text_title && memo[:word_start_position] == memo_word.start_position }
+
+    filtered_memos.each do |memo_data|
       memo = memo_word.memos.find_or_initialize_by(body: memo_data[:body])
       log_error('Error saving Memo', memo.errors.full_messages) unless memo.save
     end
