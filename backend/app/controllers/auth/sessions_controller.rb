@@ -96,7 +96,9 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
   end
 
   def create_memos_for_memo_word(memo_word, text_title)
-    filtered_memos = SampleData::MEMOS.select { |memo| memo[:text_title] == text_title && memo[:word_start_position] == memo_word.start_position }
+    filtered_memos = SampleData::MEMOS.select do |memo|
+      memo[:text_title] == text_title && memo[:word_start_position] == memo_word.start_position
+    end
 
     filtered_memos.each do |memo_data|
       memo = memo_word.memos.find_or_initialize_by(body: memo_data[:body])
