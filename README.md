@@ -51,11 +51,16 @@
 |![英文メモ](./documents/img/addText.png)| ![英文メモ](./documents/img/selectWords.png) |
 | コピーしたテキストを貼り付けて登録します。 | 文字は1文字単位で選択でき、選択中の文字は右上に表示されます。その下のテキストエリアで、文字に紐づいたメモを登録することができます。 |
 
+| 登録済みワードリスト | メモの編集 |
+| ---------- | ---------- |
+|![英文メモ](./documents/img/wordMode.png)| ![英文メモ](./documents/img/editMemo.png) |
+| テキストのリスト表示から、登録したワードのリスト表示に切り替えることができます。選択中のワードは文中で背景色が付きます。 | メモの編集や削除ができます。もちろん、テキストやワードの削除もできます。 |
+
 <br>
 
 ## ER 図
 
-![er_diagram](https://www.plantuml.com/plantuml/png/bP5BSiCW38Rtd89bk-0ENdNJGp3KQ5fcU7YGF8t7pjt3mmuXauNZ3PRufU-N691KfDbP1fuCBNn6YBXonjDdT3c4o4UvySf12IQ5-1zY5OmH586MYgfmqaTuPKTVyB_Mu9yak13oTU_F-JD1fkJ7r_TdIQHAMta_GI-dMGvSaDbT0prWEYiTxZvGMOgS0XeomUz5kazWWe4VeG9GPcXSPEfCRnbzwR6Dq0oUta9vGhvjGcnhltVMHLaIawR1aBNVxXRP05xFpju0)
+![er_diagram](https://www.plantuml.com/plantuml/png/bP5DRiGW38Ntd89bkyWTPjLD3s7HO4sH-8cmKHiblNk194YkAhMJ3R6n_Rs7RyGcSmbUOMJ7gow4cJQjTFsSxSSqzQFTH1Em1nZdl2wC5XP3z97oKNelI0obd9rpHjDg31yJ5dk5N-e2OhnxH-_0-CcajnEizKyqrEJJo-jpJzHEVmXvItOzUWXSTEoCXqen_-O730cQWHCkNGjvGiBmt5yGbaGLdkBPP6M2AWpZZ9VI1iqhrCdyaD3VDGuBGc1_cJ-7ztthVP-cVPExK29g9RdL31YfyIjlITqmsXByDm00)
 
 <br>
 
