@@ -2,7 +2,7 @@
 
 ### アプリのURL
 
-[www.eibunmemo.com](https://www.eibunmemo.com)
+[www.eibunmemo.com](https://www.eibunmemo.com)（停止中）
 
 <br>
 
